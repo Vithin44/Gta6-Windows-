@@ -19,9 +19,10 @@ Legend: **documented** = stated in inspected upstream source/docs; **partial** =
 | Textures/assets | GFX10 tiling/detiling and RPF tools documented | Texture tiling/detiling in formats crate; some render-target metadata missing | RPF9, BCPack, texture pools, model/audio extraction tools documented |
 | Audio | XAudio2 path; XMA/Opus handling described | Menu/video/loading audio; XMA/Opus decode; reverb/Opus verification gaps stated | AWC Opus/XMA2 export and decode tooling |
 | Input | XInput and keyboard/mouse mapping | XInput and keyboard-as-pad | GameInput shim via SDL3 |
+| CPU compatibility | x64 native execution; detailed preflight and instruction coverage are documented | Requires AVX2; recent issue reports show CLWB/CLZERO/MONITORX/SSE4a can matter on some CPUs | x86-64 native execution; exact CPU feature requirements need commit-pinned validation |
 | Diagnostics | Detailed report with imports, called stubs, environment, shaders, D3D12, audio, runtime and VFS | Crash logs, trace controls, shader/frame capture and GPU diagnostics | Runtime traces, GPU tests, progress dashboard and extensive issue/PR activity |
 | Synthetic tests | Unit, end-to-end test title and optional GPU tests | Workspace tests and stand-in HLE fixture | Stand-in loader test and GPU test suite |
-| Real GTA VI evidence in inspected docs | Not claimed | README reports menus and world loading, but incomplete scene rendering and a GPU hang/reset warning | README's hand-written status says no boot; current issue activity discusses real retail startup blockers and measured boot traces. Treat README status as stale/ambiguous pending commit-specific validation. |
+| Real GTA VI evidence in inspected docs | Issue #646 reports GTA VI 1.0.2.1 reaching the language screen and rendering loading art on an RTX 3060 12 GB; world loading then stops presenting and the process crashes after commit/VRAM growth (reported peak commit: 36 GB). | README reports menus and world loading, but incomplete scene rendering and a GPU hang/reset warning. Current issues also report CPU illegal-instruction failures on hosts missing CLWB/CLZERO/MONITORX/SSE4a. | README's hand-written status says no boot; current issue activity discusses real retail startup blockers and measured boot traces. Treat README status as stale/ambiguous pending commit-specific validation. |
 
 ## Source-level observations
 
@@ -29,7 +30,7 @@ Legend: **documented** = stated in inspected upstream source/docs; **partial** =
 
 At the audited commit, `crates/xcl/src/hle/d3d12x/mod.rs` exposes a real host-D3D12 backend and a null fallback. The null backend is explicitly documented as rendering nothing. Its `report.json` model records import resolution, called stubs, environment checks, VFS state, shader formats, DXC, D3D12, audio, XGameRuntime and DirectStorage statistics.
 
-**Integration opportunity:** adapt the report's evidence fields into this repository's normalized report schema. Do not import XCL runtime code into a GPL-3.x runtime.
+**Integration opportunity:** adapt the report's evidence fields into this repository's normalized report schema. Issue [#646](https://github.com/ivall/xcl/issues/646) is a useful GTA VI comparison point: it reports the language screen and loading art, followed by a world-loading failure and 36 GB peak commit. Do not import XCL runtime code into a GPL-3.x runtime.
 
 ### VIctory
 
@@ -37,7 +38,7 @@ At the audited commit, `victory-loader` prepares a lightly patched image, maps i
 
 Its README reports that menus and loading work but the world is mostly missing, frames take seconds, and a real-GPU attempt can hang/reset the display driver. Treat that as a real risk, not as an instruction to test on the user's main PC.
 
-**Integration opportunity:** use VIctory as the first GTA VI startup candidate for independent build/test comparison. Its logs and stage evidence need a neutral adapter; do not transplant the loader or graphics code.
+**Integration opportunity:** use VIctory as the first GTA VI startup candidate for independent build/test comparison. Its logs and stage evidence need a neutral adapter; do not transplant the loader or graphics code. Before any run, check the host CPU flags: current issues [#85](https://github.com/Marvisak/VIctory/issues/85), [#108](https://github.com/Marvisak/VIctory/issues/108) and [#210](https://github.com/Marvisak/VIctory/issues/210) discuss missing-instruction crashes and possible emulation/workarounds.
 
 ### Leonida
 
