@@ -37,23 +37,23 @@ The projects remain separate. Their code is not being blindly copied or combined
 
 The repository now contains an upstream audit, a source-level feature matrix, an integration architecture, a staged execution plan, contribution rules, a pinned upstream manifest where source access permits, a normalized run-report schema, XCL/VIctory report adapters and a read-only Windows host probe. GitHub Actions validates the synthetic report and adapter tests, parses the PowerShell script, and builds a downloadable Windows probe executable.
 
-The pinned XCL and VIctory no-title-data smoke tests passed on a hosted Windows Server 2025 runner: XCL 700 passed/0 failed (GPU tests skipped where the runner lacked features); VIctory 264 passed/0 failed. The latest host probe has not yet been run on the target PC. A ready-to-run Windows probe is available in [Actions run #58](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45330101418) under the `windows-host-probe` artifact. Leonida's exact commit and full dependency/license provenance are still unpinned. No GTA VI launch or gameplay has been performed by this repository.
+The latest completed no-title-data smoke run on hosted Windows Server 2025 is [run #6](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45331424599): XCL **700 passed, 0 failed, 41 ignored** (86 GPU tests skipped for lack of Wave64 and 2 for lack of GPU UMA); VIctory **264 passed, 0 failed, 4 ignored** with one test thread. The earlier parallel VIctory run crashed in `victory-shader` with Windows `0xc0000005`; the single-threaded pass makes a concurrency-sensitive issue plausible but does not prove the cause. XCL's upstream main has since advanced to `d208e14b765f469f4b56301b78afa8dac5378339`; the next smoke run is pinned to that revision to test its new semantic shader-cache implementation. The latest host probe passed CI validation in [run #89](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45331424597); download the [standalone Windows host-probe bundle](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45331424597/artifacts/14892002276). It has not yet been run on the target PC. No GTA VI launch or gameplay has been performed by this repository.
 
 ## Roadmap
 
-1. Recheck DedSec source availability and verify its revision, LICENSE and submodules.
-2. Finish the remaining Leonida revision and dependency/license audit.
-2. Run the Windows capability probe on the target PC.
-3. Build VIctory and XCL independently with synthetic/unit tests.
-4. Normalize test reports and compare loader/graphics behavior.
-5. Evaluate authorized local-data workflows only where supported by the upstream projects.
-6. Track runtime startup, rendering and gameplay as separate evidence gates.
+1. Re-run XCL at its current main revision and validate the semantic shader-cache change.
+2. Finish the remaining Leonida revision and dependency/license audit; recheck DedSec source, LICENSE and submodules.
+3. Run the Windows capability probe on the target PC.
+4. Compare loader, D3D12, shader and memory requirements against the RX 6600 host report.
+5. Evaluate authorized local-data workflows only where supported by an upstream.
+6. Track process startup, menu, world loading, scene rendering and playable gameplay as separate evidence gates.
 
 See [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) for milestone exit criteria.
 
 ## Repository map
 
 - [docs/UPSTREAMS.md](docs/UPSTREAMS.md) — project comparison, licenses, revisions and audit gaps.
+- [docs/CURRENT_UPSTREAM_STATUS.md](docs/CURRENT_UPSTREAM_STATUS.md) — current XCL/VIctory/DedSec progress, verified CI results and next test targets.
 - [docs/DEDSEC_AUDIT.md](docs/DEDSEC_AUDIT.md) — preliminary DedSec claims, verification gaps and candidate components.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — proposed independent integration architecture.
 - [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) — milestones, blockers and evidence gates.

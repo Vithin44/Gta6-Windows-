@@ -8,14 +8,14 @@
       "name": "XCL",
       "repository": "https://github.com/ivall/xcl",
       "branch": "main",
-      "commit": "64b3f35599bb7102f55d640e1a791e7d6dd3b175",
+      "commit": "d208e14b765f469f4b56301b78afa8dac5378339",
       "license": "GPL-2.0-only",
-      "license_evidence": "LICENSE and Cargo.toml fetched from upstream main on 2026-11-24",
+      "license_evidence": "LICENSE and Cargo.toml confirm GPL-2.0-only; current main HEAD checked 2026-11-24 at d208e14b765f469f4b56301b78afa8dac5378339.",
       "graphics_path": "Xbox D3D12.X to host D3D12; RDNA2 shaders to HLSL/DXIL",
       "role": "general_xbox_series_reference",
       "checkout": null,
       "source_import_allowed": false,
-      "notes": "Latest main was rechecked on 2026-11-24 and remains pinned to 64b3f35599bb7102f55d640e1a791e7d6dd3b175. Issue #646 reports a GTA VI 1.0.2.1 run reaching the language screen/loading art before world-loading failure; the issue's test revision differs from this manifest pin."
+      "notes": "Current main HEAD checked 2026-11-24 at d208e14b765f469f4b56301b78afa8dac5378339. README reports four retail titles working at different levels, a fifth recent retail title reaching menus, 26,698 shader programs translated, 370+ tests and an FSR 4 path; these are not a claim that GTA VI is playable. New main revision adds semantic translated-shader cache identity based on translator sources and DXC toolchain. GTA VI issue #646 reports language/loading art then world-loading failure."
     },
     {
       "id": "victory",

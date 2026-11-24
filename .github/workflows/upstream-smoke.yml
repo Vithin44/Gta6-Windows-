@@ -23,7 +23,7 @@ jobs:
     runs-on: windows-2025
     timeout-minutes: 60
     env:
-      XCL_SHA: 64b3f35599bb7102f55d640e1a791e7d6dd3b175
+      XCL_SHA: d208e14b765f469f4b56301b78afa8dac5378339
       CARGO_TERM_COLOR: always
       CARGO_INCREMENTAL: 0
     steps:

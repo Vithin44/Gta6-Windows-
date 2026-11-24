@@ -1,7 +1,7 @@
 # Integration and execution plan
 
 **Baseline date:** 2026-11-24  
-**Current phase:** upstream audit, report tooling and host diagnostics  
+**Current phase:** pinned upstream regression tests, updated source audit and host diagnostics  
 **Rule:** each milestone has an observable exit condition. Do not report a milestone as complete without evidence.
 
 ## Milestone 0 — Establish project rules
@@ -37,7 +37,7 @@
 
 **Status: Windows artifact build configured; target-PC execution pending**
 
-The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags, RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. GitHub Actions now builds and publishes a ready-to-run Windows executable artifact. The current host-probe revision compiled and published successfully in [validation run #58](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45330101418); its `windows-host-probe` artifact expires 2026-12-08. It includes committed-memory/pagefile metrics and the precise AVX-state flag. Use the newest successful workflow artifact, not an older run. The probe has not yet been run on the target PC.
+The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags, RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps lane range, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. GitHub Actions built and executed the probe successfully in [validation run #89](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45331424597); download the [standalone host-probe bundle](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45331424597/artifacts/14892002276). The bundle expires 2026-12-08. The probe has not yet been run on the target PC.
 
 Create a read-only Windows host probe. First target the user's reported hardware:
 
@@ -52,18 +52,18 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 
 ## Milestone 3 — Independent source checkout and clean builds
 
-**Status: XCL and VIctory pinned smoke tests passed; Leonida remains unpinned**
+**Status: XCL and VIctory pinned smoke tests passed; latest XCL revision is queued; Leonida remains unpinned**
 
 - [x] Add pinned XCL and VIctory source references to an isolated GitHub Actions workflow.
 - [x] Keep each upstream in its own ephemeral checkout and build directory; no upstream source is committed here.
 - [x] Restrict XCL tests to the upstream-supported no-title-data suite and skip its retail title end-to-end test.
 - [x] Build VIctory with `cargo build --workspace --locked`, then run its documented `cargo test --workspace --locked` suite; no title data is used.
-- [x] Capture build/test logs and confirm skipped GPU tests are clearly reported. XCL: 700 passed, 0 failed, 41 ignored; 86 GPU tests skipped for no Wave64 and 2 for no GPU UMA. VIctory initially passed 264/0/4 on run #2, but a repeat on run #5 built successfully and then crashed in `victory-shader` with Windows `0xc0000005`; single-threaded rerun is in progress.
+- [x] Capture build/test logs and confirm skipped GPU tests are clearly reported. Run #6: XCL 700 passed, 0 failed, 41 ignored; 86 GPU tests skipped for no Wave64 and 2 for no GPU UMA. VIctory 264 passed, 0 failed, 4 ignored with `--test-threads=1`. The prior parallel run #5 crashed in `victory-shader` with Windows `0xc0000005`; a possible concurrency-sensitive issue remains unproven.
 - [ ] Add Leonida only after its exact revision and full dependency/license provenance can be verified.
 - [ ] Add DedSec to CI only after the repository is reachable and its license, submodules and source provenance are verified.
 - [ ] Do not build or run leaked executables or unknown prebuilt binaries.
 
-**Exit evidence:** [first successful smoke run #2](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45329732775); [repeat run #5](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45330985025) exposed a VIctory shader-test access violation after a successful build. The rerun uses one test thread to investigate. All tests use no title data and run on hosted Windows Server 2025. XCL GPU tests skip because that runner has no Wave64/GPU UMA. Leonida remains blocked on exact source revision and dependency provenance. DedSec is a preliminary README-only candidate: its README marks boot pending and play not achieved, while source/API access returned 404; see `docs/DEDSEC_AUDIT.md`.
+**Exit evidence:** [completed run #6](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45331424599): XCL 700/0/41 and VIctory 264/0/4, with VIctory single-threaded. All tests use no title data and run on hosted Windows Server 2025. XCL GPU tests skip because that runner lacks Wave64/GPU UMA. XCL's upstream main has advanced to `d208e14b765f469f4b56301b78afa8dac5378339`; the next run will test that revision's shader-cache changes. Leonida remains blocked on exact source revision and dependency provenance. DedSec is a preliminary README-only candidate: its README marks boot pending and play not achieved, while source/API access returns 404; see `docs/DEDSEC_AUDIT.md`.
 
 ## Milestone 4 — Shared report and diagnostics tooling
 
@@ -156,9 +156,9 @@ Otherwise, keep this repository as an orchestration, comparison and diagnostics 
 
 ## Immediate next actions
 
-1. Finish the latest Windows CI run, verify the standalone host-probe bundle, and publish its current run link.
-2. Complete the new VIctory build-plus-test run and retain its build/test logs.
-3. Obtain Leonida's exact commit, full LICENSE and submodule/dependency provenance through a verified source endpoint; keep it excluded until then.
-4. Use the standalone probe once on the target PC to collect CPU flags, free/committed RAM, commit limit, RX 6600 driver, D3D12 features and optional Vulkan summary.
-5. Compare the real host report with VIctory's AVX2/SM 6.6/mesh requirements, XCL's memory pressure and Leonida's Vulkan/Wave64 requirements.
-6. Add Leonida report normalization and graphics-specific synthetic comparisons only after its source and artifact formats are pinned.
+1. Run the newly pinned XCL main revision and retain its semantic shader-cache regression results.
+2. Use the standalone probe on the target PC to collect CPU flags, free/committed RAM, commit limit, RX 6600 driver, D3D12 shader model, WaveOps lane range, mesh-shader tier and optional Vulkan summary.
+3. Compare the real host report with VIctory's AVX2/SM 6.6/mesh requirements, XCL's Wave64/mesh requirements and the reported memory pressure.
+4. Obtain Leonida's exact commit, full LICENSE and submodule/dependency provenance through a verified source endpoint; keep it excluded until then.
+5. Recheck DedSec source availability and license provenance; do not copy until its source and third-party licenses can be inspected.
+6. Add graphics-specific synthetic comparisons and report normalization only after each upstream revision and artifact format are pinned.

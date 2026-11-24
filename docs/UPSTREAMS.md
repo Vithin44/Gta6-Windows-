@@ -9,7 +9,7 @@ These projects overlap in Xbox Series compatibility work, but they are not inter
 
 | Project | Declared license | Main approach | GTA VI evidence in current public docs | Disposition |
 |---|---|---|---|---|
-| [XCL](https://github.com/ivall/xcl) | GPL-2.0-only | Xbox services/HLE; D3D12.X-to-host-D3D12; RDNA2-to-HLSL/DXIL | Issue #646 reports a 1.0.2.1 run reaching the language screen and loading art, then failing during world loading. | General Xbox compatibility reference and separate runtime candidate. |
+| [XCL](https://github.com/ivall/xcl) | GPL-2.0-only | Xbox services/HLE; D3D12.X-to-host-D3D12; RDNA2-to-HLSL/DXIL | README now lists four retail titles working at different levels and another recent title reaching menus; no current README claim that GTA VI is playable. Older issue #646 reports a GTA VI 1.0.2.1 run reaching language/loading art before world-load failure. | Most mature general Xbox/D3D12 reference; keep separate from GTA VI-specific VIctory. |
 | [VIctory](https://github.com/Marvisak/VIctory) | GPL-3.0-or-later in Cargo metadata; LICENSE is GPL v3 | Windows PE loader; HLE; D3D12.X-to-host-D3D12; RDNA2-to-DXIL | README reports menus, intro video and world loading, but no playable rendered scene; warns of real-GPU hangs/resets. | Strongest documented real-title boot progress in this audit; prioritize independent build/test comparison. |
 | [Leonida](https://github.com/ProjectLeonida/Leonida) | GPLv3-or-later stated in README; GitHub page labels GPL-3.0 | Static recompilation; D3D12-to-Vulkan; RDNA2-to-SPIR-V; asset/shader tooling | README says GTA VI does not boot yet. It reports 26,503 shader translations and broad GPU tests, while the real executable path remains untested. | Valuable shader, Vulkan, GPU-test and asset-format research; not a boot-ready runtime. |
 | [DedSec](https://github.com/Hylanderry/DedSec) | MIT claimed by README; LICENSE blob unverified | Xbox Series → Windows; RDNA2-to-HLSL/SM 6.6/DXIL; native D3D12 | README explicitly says boot pending and not playable; PE loader partial, D3D12 Xbox ABI proxy in progress. Source/API returned 404 during audit. | Candidate for D3D12 shader, GDeflate, XTaskQueue, audio/input and diagnostics comparison; no code reuse yet. |
@@ -20,7 +20,7 @@ Revisions are immutable commit identifiers where the GitHub connector exposed th
 
 | Project | Branch | Audited revision | Evidence and limitation |
 |---|---|---|---|
-| XCL | `main` | `64b3f35599bb7102f55d640e1a791e7d6dd3b175` | Rechecked against GitHub's main-branch API on 2026-11-24; README, Cargo.toml, LICENSE, HANDOFF/design docs, THIRD_PARTY.md and report source inspected. |
+| XCL | `main` | `d208e14b765f469f4b56301b78afa8dac5378339` | Current main HEAD checked 2026-11-24. Our completed smoke run #6 tested the previous pin `64b3f35599bb7102f55d640e1a791e7d6dd3b175`; the next run is pinned to this newer HEAD, which includes semantic shader-cache identity changes. |
 | VIctory | `main` | `d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989` | Rechecked against GitHub's main-branch API on 2026-11-24; README, Cargo.toml, LICENSE, architecture, loader and crash-handler source inspected. |
 | Leonida | `main` | **Not pinned** | The public page is available and its README was inspected, but GitHub API/file retrieval returned 404 through the connected GitHub interface. The README's clone URL is `https://github.com/ItsNotRexed/Leonida`; the page resolves to `ProjectLeonida/Leonida`. Exact SHA, LICENSE blob and submodule revisions remain unverified. |
 | DedSec | `dedsec-clean` (cached page only) | **Not pinned** | Search index showed 37 commits and a repository tree, but direct GitHub page/API and raw source requests returned 404. No exact SHA, LICENSE blob, source or submodule revisions verified. See `docs/DEDSEC_AUDIT.md`. |
@@ -30,15 +30,17 @@ The manifest stores these states in `manifests/upstreams.json`. Null Leonida and
 ## XCL
 
 - Rust workspace; top-level LICENSE is GNU GPL version 2 and Cargo metadata declares GPL-2.0-only.
-- General Xbox Series X|S compatibility layer, not a GTA VI-only port.
+- General Xbox Series X|S compatibility layer, not a GTA VI-only port. The current README lists Minecraft Preview and Unicorn Overlord as fully playable, Fortnite and XDefiant working without their online services, and a newer unnamed retail title reaching menus/settings at 30 fps on a 32 GB machine; the latter's minimap mesh pipelines are still refused. This is upstream documentation, not a GTA VI compatibility claim.
 - Uses a PE loader/import resolver, HLE modules, virtual filesystem and copy-on-write overlay.
 - Graphics path: Xbox D3D12.X to host D3D12; RDNA2 shader recompilation to HLSL/DXIL. A null graphics backend exists for diagnostics but does not render.
 - `crates/xcl/src/report.rs` defines a structured `report.json` with version/title/exit/crash data, environment checks, import resolution, called stubs, modules, VFS, shader, DXC, D3D12, audio, XGameRuntime and DirectStorage statistics. This is the first upstream format targeted by our report adapter.
 - Issue [#646](https://github.com/ivall/xcl/issues/646) reports GTA VI 1.0.2.1 reaching the language screen and rendering loading art on an RTX 3060 12 GB, then failing during world loading. The issue reports peak system commit around 36 GB and local VRAM around 12.9 GB. It is an upstream issue report, not a result reproduced here.
 - A later comment on that issue describes a separate 12 GB GPU run with 32 GB system RAM reaching roughly 40 GB private commit and stalling in shader pipeline work. Treat memory/commit pressure as a major risk for a 16 GB host, not as a proven hard minimum.
 - The issue's run revision is `a6f5f7a` plus locally applied files from PRs; it is not the same evidence as our pinned source snapshot.
+- The current README reports 26,698 RDNA2 shader programs (26,503 records) translated to HLSL, random DXC samples compiling with zero errors, 370+ automated tests including instruction-level GPU comparisons, 909/912 retail textures decoded byte-for-byte, and an end-to-end FSR 4 console upscaler path tested on an RX 9070. These are upstream-reported results; they are not tests run by this repository or on the user's RX 6600.
+- The current XCL main adds a semantic translated-shader cache identity: a build-time hash of translator sources plus the loaded DXC toolchain, stored in a v2 namespace. This avoids invalidating compatible translated DXIL for unrelated executable/profile changes. New tests cover source/toolchain identity, cache namespace inputs and legacy-cache isolation. We are advancing our CI pin to this revision.
 - Its own Windows CI builds the workspace and runs unit/integration tests without a GPU or game data. The upstream CI explicitly skips the retail title end-to-end test; game-data tests are skipped when their sample variables are unset, and unsupported GPU tests report SKIPPED.
-- Our isolated smoke workflow reran the pinned revision: 700 tests passed, 0 failed, 41 ignored. The hosted Windows runner skipped 86 GPU tests for lack of Wave64 and 2 for lack of GPU UMA. This is not an RX 6600 GPU test.
+- Our completed isolated smoke run #6 on pin `64b3f35599bb7102f55d640e1a791e7d6dd3b175` reported 700 passed, 0 failed, 41 ignored. The hosted Windows runner skipped 86 GPU tests for lack of Wave64 and 2 for lack of GPU UMA. This is not an RX 6600 GPU test. The next run targets the newer main HEAD `d208e14b765f469f4b56301b78afa8dac5378339` and its semantic cache tests.
 - `THIRD_PARTY.md` lists additional provenance and compatibility constraints. It explicitly warns against bringing GPL-3.0/LGPL-3.0 code into this GPL-2.0-only project.
 
 ## VIctory
@@ -51,7 +53,7 @@ The manifest stores these states in `manifests/upstreams.json`. Null Leonida and
 - The current loader crash handler contains compatibility emulation for selected Zen 2-specific instructions on other CPUs: CLZERO, MONITORX/MWAITX, selected CLWB patterns and SSE4A operations. This reduces some instruction-set blockers but does not prove every CPU path or performance is compatible. AVX2 remains a stated requirement.
 - The run path writes crash diagnostics to `crashes.log`; the loader maps the PE through Windows to preserve TLS/unwind behavior and resolves imports through HLE, host and title DLLs.
 - The README documents `cargo test --workspace` as a no-game-data test suite. The repository pins Rust 1.98.1 in `rust-toolchain.toml`.
-- Our first isolated smoke run at the pinned revision reported 264 tests passed, 0 failed, 4 ignored. A later repeat on the same pinned revision built successfully but the `victory-shader` test process terminated with Windows `0xc0000005` (access violation) after several tests, without a Rust assertion failure. XCL passed again. This makes VIctory's test result non-deterministic in our hosted Windows runner; we are rerunning its workspace suite single-threaded to isolate a possible race or unsafe-code issue. No title data was configured or used.
+- Our first isolated smoke run reported 264 tests passed, 0 failed, 4 ignored. A later parallel repeat built successfully but the `victory-shader` test process terminated with Windows `0xc0000005` (access violation), without a Rust assertion failure. The single-threaded rerun in [run #6](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45331424599) passed again: 264 passed, 0 failed, 4 ignored. This is consistent with a possible concurrency-sensitive test/runtime issue, but the cause is not established; retain a parallel-vs-single-thread regression check before calling it resolved. No title data was configured or used.
 - No stable, versioned JSON run-report format was found in the inspected source. Our adapter therefore imports the text crash log and optional console output conservatively; it does not infer visual progress.
 
 ## DedSec — preliminary only
@@ -76,7 +78,7 @@ AMD documents the RX 6600 as RDNA2 `gfx1032`, while DedSec's README emphasizes `
 
 ## Our isolated smoke-test result
 
-Workflow [run #2](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45329732775) completed successfully on Windows Server 2025. XCL and VIctory were cloned at the exact revisions above into separate temporary folders; no upstream source was committed into this repository. Test logs are retained as 14-day workflow artifacts. These are software build/unit/integration results on a hosted runner, not evidence that either runtime works on the user's PC or that GTA VI is playable.
+Workflow [run #6](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45331424599) completed successfully on Windows Server 2025. XCL and VIctory were cloned at separate immutable revisions into temporary folders; no upstream source was committed here. XCL reported 700/0/41 and VIctory 264/0/4; XCL GPU tests were skipped on the hosted runner for missing Wave64/GPU UMA. Logs are retained as workflow artifacts. These are no-title-data build/unit/integration results, not evidence that either runtime works on the user's PC or that GTA VI is playable.
 
 ## License and integration constraints
 
