@@ -26,6 +26,26 @@ $computer = Get-CimInstance -ClassName Win32_ComputerSystem
 $processors = @(Get-CimInstance -ClassName Win32_Processor)
 $videoControllers = @(Get-CimInstance -ClassName Win32_VideoController)
 $logicalDisks = @(Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DriveType=3")
+$memoryStats = $null
+try {
+    $memoryStats = Get-CimInstance -ClassName Win32_PerfFormattedData_PerfOS_Memory -ErrorAction Stop
+} catch {
+    $memoryStats = $null
+}
+$pageFileStats = @()
+try {
+    $pageFileStats = @(Get-CimInstance -ClassName Win32_PageFileUsage -ErrorAction Stop)
+} catch {
+    $pageFileStats = @()
+}
+$pageFileAllocatedMb = [int64]0
+$pageFileCurrentUsageMb = [int64]0
+$pageFilePeakUsageMb = [int64]0
+foreach ($pageFile in $pageFileStats) {
+    $pageFileAllocatedMb += [int64](Get-SafeProperty $pageFile "AllocatedBaseSize")
+    $pageFileCurrentUsageMb += [int64](Get-SafeProperty $pageFile "CurrentUsage")
+    $pageFilePeakUsageMb += [int64](Get-SafeProperty $pageFile "PeakUsage")
+}
 
 $cpuFeatures = [ordered]@{
     avx2 = $null
@@ -128,6 +148,12 @@ $report = [ordered]@{
         totalPhysicalBytes = Get-SafeProperty $computer "TotalPhysicalMemory"
         freePhysicalMemoryKb = Get-SafeProperty $os "FreePhysicalMemory"
         totalVisibleMemorySizeKb = Get-SafeProperty $os "TotalVisibleMemorySize"
+        committedBytes = Get-SafeProperty $memoryStats "CommittedBytes"
+        commitLimitBytes = Get-SafeProperty $memoryStats "CommitLimit"
+        availableMBytes = Get-SafeProperty $memoryStats "AvailableMBytes"
+        pageFileAllocatedMb = $pageFileAllocatedMb
+        pageFileCurrentUsageMb = $pageFileCurrentUsageMb
+        pageFilePeakUsageMb = $pageFilePeakUsageMb
     }
     processors = @(
         foreach ($cpu in $processors) {
