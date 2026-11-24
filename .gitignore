@@ -32,6 +32,9 @@
 *.pfx
 *.p12
 
+tools/host_probe/host_caps.exe
+*.obj
+
 # Crash dumps and process memory captures
 *.dmp
 *.mdmp
