@@ -1,0 +1,51 @@
+name: Validate research artifacts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  report-schema:
+    name: Validate JSON reports and manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install report validator
+        run: python -m pip install -r tools/report/requirements.txt
+      - name: Validate upstream manifest JSON
+        run: python -m json.tool manifests/upstreams.json > /dev/null
+      - name: Validate report schema and synthetic fixture
+        run: python tools/report/validate_report.py examples/reports/synthetic-pass.json
+
+  powershell-syntax:
+    name: Parse Windows host probe
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Parse PowerShell without running it
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $parseErrors = $null
+          $path = (Resolve-Path "tools/host_probe/Collect-HostInfo.ps1").Path
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            $path,
+            [ref]$tokens,
+            [ref]$parseErrors
+          ) | Out-Null
+          if ($parseErrors.Count -gt 0) {
+            $parseErrors | Format-List
+            exit 1
+          }
+          Write-Host "PowerShell syntax is valid."
