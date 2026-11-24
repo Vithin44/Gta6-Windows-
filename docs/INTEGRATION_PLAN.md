@@ -50,17 +50,17 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 
 ## Milestone 3 — Independent source checkout and clean builds
 
-**Status: first pinned smoke workflow configured; CI results pending**
+**Status: XCL and VIctory pinned smoke tests passed; Leonida remains unpinned**
 
 - [x] Add pinned XCL and VIctory source references to an isolated GitHub Actions workflow.
 - [x] Keep each upstream in its own ephemeral checkout and build directory; no upstream source is committed here.
 - [x] Restrict XCL tests to the upstream-supported no-title-data suite and skip its retail title end-to-end test.
 - [x] Use VIctory's documented `cargo test --workspace --locked` suite, which requires no title data.
-- [ ] Capture successful build/test logs and confirm skipped GPU tests are clearly reported.
+- [x] Capture successful build/test logs and confirm skipped GPU tests are clearly reported. XCL: 700 passed, 0 failed, 41 ignored; 86 GPU tests skipped for no Wave64 and 2 for no GPU UMA. VIctory: 264 passed, 0 failed, 4 ignored.
 - [ ] Add Leonida only after its exact revision and full dependency/license provenance can be verified.
 - [ ] Do not build or run leaked executables or unknown prebuilt binaries.
 
-**Exit evidence:** reproducible build records for each independently buildable upstream. A build failure is recorded as-is, not hidden. The first CI run is [Independent upstream smoke tests](https://github.com/Vithin44/Gta6-Windows-/actions/workflows/upstream-smoke.yml).
+**Exit evidence:** [successful workflow run #2](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45329732775) and its 14-day log artifacts. The tests used no title data and ran on a hosted Windows Server 2025 runner; XCL GPU tests skipped because that runner has no Wave64/GPU UMA. Leonida remains blocked on exact source revision and dependency provenance.
 
 ## Milestone 4 — Shared report and diagnostics tooling
 
