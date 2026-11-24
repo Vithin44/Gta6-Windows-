@@ -1,0 +1,130 @@
+{
+  "reportVersion": 1,
+  "collectedAtUtc": "2026-11-24T12:00:00.0000000Z",
+  "machineName": "SYNTHETIC-CI",
+  "operatingSystem": {
+    "caption": "Windows 11",
+    "version": "10.0",
+    "buildNumber": "26100",
+    "architecture": "64-bit"
+  },
+  "memory": {
+    "totalPhysicalBytes": 17179869184,
+    "freePhysicalMemoryKb": 8388608,
+    "totalVisibleMemorySizeKb": 16777216,
+    "committedBytes": 8589934592,
+    "commitLimitBytes": 34359738368,
+    "availableMBytes": 8192,
+    "pageFileAllocatedMb": 16384,
+    "pageFileCurrentUsageMb": 2048,
+    "pageFilePeakUsageMb": 4096
+  },
+  "processors": [
+    {
+      "name": "Synthetic AMD Ryzen 5 5500",
+      "manufacturer": "AuthenticAMD",
+      "cores": 6,
+      "logicalProcessors": 12,
+      "addressWidth": 64
+    }
+  ],
+  "cpuFeatures": {
+    "avx2": true,
+    "nativeProbe": {
+      "vendor": "AuthenticAMD",
+      "brand": "Synthetic AMD Ryzen 5 5500",
+      "avx": true,
+      "avx2_hardware": true,
+      "avx_os_state_enabled": true,
+      "sse4a": true,
+      "clwb": false,
+      "clzero": true,
+      "monitorx": true,
+      "mwaitx": true,
+      "clflushopt": false,
+      "fma3": true,
+      "bmi1": true,
+      "bmi2": true
+    }
+  },
+  "graphics": {
+    "adapters": [
+      {
+        "name": "Synthetic AMD Radeon RX 6600",
+        "videoProcessor": "Synthetic RDNA2",
+        "driverVersion": "synthetic",
+        "driverDate": null,
+        "adapterRamReportedBytes": 4294967296,
+        "note": "Synthetic fixture only."
+      }
+    ],
+    "d3d12": {
+      "queried": true,
+      "executableFound": true,
+      "result": {
+        "probe_version": 1,
+        "cpu": {
+          "vendor": "AuthenticAMD",
+          "brand": "Synthetic AMD Ryzen 5 5500",
+          "avx": true,
+          "avx2_hardware": true,
+          "avx_os_state_enabled": true,
+          "sse4a": true,
+          "clwb": false,
+          "clzero": true,
+          "monitorx": true,
+          "mwaitx": true,
+          "clflushopt": false,
+          "fma3": true,
+          "bmi1": true,
+          "bmi2": true
+        },
+        "dxgi_factory_available": true,
+        "adapters": [
+          {
+            "name": "Synthetic AMD Radeon RX 6600",
+            "vendor_id": 4098,
+            "device_id": 1234,
+            "dedicated_video_memory_bytes": 8589934592,
+            "d3d12_available": true,
+            "feature_level": "12_1",
+            "shader_model": "6_7",
+            "wave_ops": true,
+            "wave_lane_min": 32,
+            "wave_lane_max": 64,
+            "mesh_shader_tier": "1",
+            "d3d12_create_hr": 0,
+            "shader_model_hr": 0,
+            "options1_hr": 0,
+            "options7_hr": 0
+          }
+        ]
+      },
+      "error": null
+    },
+    "d3d12FeatureLevel": "See graphics.d3d12.result.adapters when queried",
+    "shaderModel": "See graphics.d3d12.result.adapters when queried",
+    "meshShaderTier": "See graphics.d3d12.result.adapters when queried",
+    "vulkan": {
+      "queried": false,
+      "commandFound": false,
+      "summary": null,
+      "error": null
+    }
+  },
+  "fixedDisks": [
+    {
+      "device": "C:",
+      "volumeName": "Synthetic",
+      "sizeBytes": 1073741824000,
+      "freeBytes": 536870912000
+    }
+  ],
+  "safety": {
+    "gameFilesScanned": false,
+    "gameProcessesLaunched": false,
+    "settingsChanged": false,
+    "softwareInstalled": false,
+    "networkUsed": false
+  }
+}
