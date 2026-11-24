@@ -19,13 +19,13 @@
 
 ## Milestone 1 — Pin and deepen upstream audits
 
-**Status: in progress — XCL and VIctory pinned; Leonida source pin blocked**
+**Status: in progress — XCL and VIctory pinned; Leonida and DedSec source pins blocked**
 
-- [ ] Pin Leonida to a full 40-character commit SHA and capture its full LICENSE, third-party notices and submodule revisions.
+- [ ] Pin Leonida to a full 40-character commit SHA and capture its full LICENSE, third-party notices and submodule revisions.\n- [ ] Recheck DedSec availability; capture its full commit SHA, actual LICENSE, `.gitmodules`, third-party notices and source before considering it for CI.
 - [x] Pin XCL and VIctory to full commit SHAs and inspect key loader, runtime, D3D12 and shader source files at those revisions.
 - [ ] Record top-level and dependency licenses, including submodules and generated/test data.
 - [x] Compare the documented loader, TLS, import resolution, filesystem, runtime services, D3D12.X, shader translation, audio and input paths for XCL and VIctory.
-- [ ] Complete the same file-level comparison for Leonida after its source revision is reachable.
+- [ ] Complete the same file-level comparison for Leonida after its source revision is reachable.\n- [ ] If DedSec becomes accessible, inspect its RDNA2-to-HLSL/DXIL translator, PE loader, D3D12 ABI proxy, GDeflate, XTaskQueue and test corpus at a pinned revision.
 - [ ] Separate synthetic tests, tests using public samples, and tests requiring user-owned title data.
 - [ ] Inspect CI workflows and recent failures; distinguish passing tests from skipped tests.
 
@@ -57,10 +57,10 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 - [x] Restrict XCL tests to the upstream-supported no-title-data suite and skip its retail title end-to-end test.
 - [x] Build VIctory with `cargo build --workspace --locked`, then run its documented `cargo test --workspace --locked` suite; no title data is used.
 - [x] Capture successful build/test logs and confirm skipped GPU tests are clearly reported. XCL: 700 passed, 0 failed, 41 ignored; 86 GPU tests skipped for no Wave64 and 2 for no GPU UMA. VIctory: 264 passed, 0 failed, 4 ignored.
-- [ ] Add Leonida only after its exact revision and full dependency/license provenance can be verified.
+- [ ] Add Leonida only after its exact revision and full dependency/license provenance can be verified.\n- [ ] Add DedSec to CI only after the repository is reachable and its license, submodules and source provenance are verified.
 - [ ] Do not build or run leaked executables or unknown prebuilt binaries.
 
-**Exit evidence:** [successful workflow run #2](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45329732775) and its 14-day log artifacts. The tests used no title data and ran on a hosted Windows Server 2025 runner; XCL GPU tests skipped because that runner has no Wave64/GPU UMA. Leonida remains blocked on exact source revision and dependency provenance.
+**Exit evidence:** [successful workflow run #2](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45329732775) and its 14-day log artifacts. The tests used no title data and ran on a hosted Windows Server 2025 runner; XCL GPU tests skipped because that runner has no Wave64/GPU UMA. Leonida remains blocked on exact source revision and dependency provenance. DedSec is a preliminary README-only candidate: its README marks boot pending and play not achieved, while source/API access returned 404; see `docs/DEDSEC_AUDIT.md`.
 
 ## Milestone 4 — Shared report and diagnostics tooling
 

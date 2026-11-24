@@ -16,9 +16,9 @@ We are building an evidence and integration layer around three independent upstr
 
 - **[VIctory](https://github.com/Marvisak/VIctory)** — GTA VI-specific Windows/D3D12 runtime research.
 - **[Leonida](https://github.com/ProjectLeonida/Leonida)** — GTA VI-specific Vulkan, shader, asset-format and runtime research.
-- **[XCL](https://github.com/ivall/xcl)** — general Xbox Series compatibility-layer research.
+- **[XCL](https://github.com/ivall/xcl)** — general Xbox Series compatibility-layer research.\n- **[DedSec](https://github.com/Hylanderry/DedSec)** — preliminary D3D12/DXIL and Xbox shim candidate; source and license currently unverified.
 
-The projects remain separate. Their code is not being blindly copied or combined: XCL declares GPL-2.0-only, while VIctory and Leonida declare GPL-3.x licenses. See [the upstream audit](docs/UPSTREAMS.md).
+The projects remain separate. Their code is not being blindly copied or combined: XCL declares GPL-2.0-only, while VIctory and Leonida declare GPL-3.x licenses. DedSec's README claims MIT, but its LICENSE file could not be verified. See [the upstream audit](docs/UPSTREAMS.md) and [the preliminary DedSec audit](docs/DEDSEC_AUDIT.md).
 
 ## Working principles
 
@@ -40,7 +40,7 @@ The pinned XCL and VIctory no-title-data smoke tests passed on a hosted Windows 
 
 ## Roadmap
 
-1. Finish the remaining Leonida revision and dependency/license audit.
+1. Recheck DedSec source availability and verify its revision, LICENSE and submodules.\n2. Finish the remaining Leonida revision and dependency/license audit.
 2. Run the Windows capability probe on the target PC.
 3. Build VIctory and XCL independently with synthetic/unit tests.
 4. Normalize test reports and compare loader/graphics behavior.
@@ -51,7 +51,7 @@ See [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) for milestone exit crit
 
 ## Repository map
 
-- [docs/UPSTREAMS.md](docs/UPSTREAMS.md) — project comparison, licenses, revisions and audit gaps.
+- [docs/UPSTREAMS.md](docs/UPSTREAMS.md) — project comparison, licenses, revisions and audit gaps.\n- [docs/DEDSEC_AUDIT.md](docs/DEDSEC_AUDIT.md) — preliminary DedSec claims, verification gaps and candidate components.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — proposed independent integration architecture.
 - [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) — milestones, blockers and evidence gates.
 - [docs/FEATURE_MATRIX.md](docs/FEATURE_MATRIX.md) — source-level comparison of the three upstreams.

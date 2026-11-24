@@ -5,7 +5,7 @@
 
 ## Executive summary
 
-These projects overlap in Xbox Series compatibility work, but they are not interchangeable modules. They use different graphics paths, have different maturity claims, and carry copyleft licenses that prevent us from assuming their source can be merged into one combined derivative.
+These projects overlap in Xbox Series compatibility work, but they are not interchangeable modules. DedSec is an additional preliminary candidate whose source could not be inspected in this audit. They use different graphics paths, have different maturity claims, and carry copyleft licenses that prevent us from assuming their source can be merged into one combined derivative.
 
 | Project | Declared license | Main approach | GTA VI evidence in current public docs | Disposition |
 |---|---|---|---|---|

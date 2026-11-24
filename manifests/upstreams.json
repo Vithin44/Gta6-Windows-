@@ -45,6 +45,20 @@
       "source_import_allowed": false,
       "notes": "Current public README inspected 2026-11-24: no GTA VI boot/playable state; 26,503 shaders translated with documented SPIR-V validation runs; GPU test suite results span 30+ GPU/driver combinations; D3D12-to-Vulkan remains in progress. The README clone URL is ItsNotRexed/Leonida and the repository page resolves to ProjectLeonida/Leonida. GitHub API/file retrieval returned 404 in this connector, so exact main SHA, LICENSE blob, submodule revisions and complete dependency provenance remain unpinned.",
       "clone_url": "https://github.com/ItsNotRexed/Leonida"
+    },
+    {
+      "id": "dedsec",
+      "name": "DedSec",
+      "repository": "https://github.com/Hylanderry/DedSec",
+      "branch": "dedsec-clean",
+      "commit": null,
+      "license": "MIT (claimed by README; not verified)",
+      "license_evidence": "Cached README states MIT, but direct GitHub page/API and LICENSE blob returned 404 during 2026-11-24 audit. Treat license as unverified.",
+      "graphics_path": "README claims RDNA2 gfx1030 to HLSL Shader Model 6.6 to DXIL and native D3D12",
+      "role": "candidate_d3d12_shader_runtime_gdeflate_and_xbox_shim_reference",
+      "checkout": null,
+      "source_import_allowed": false,
+      "notes": "Cached repository page listed 37 commits and source folders; no immutable HEAD SHA or source files could be retrieved. README claims 26,503 shaders/1,630 instruction forms, GDeflate, XTaskQueue, XAudio2, input adapter, FSR3, VRS, async compute and cache systems. README explicitly marks PE loader/import shims partial, Xbox D3D12 ABI proxy in progress, real game boot pending and in-game play not achieved. See docs/DEDSEC_AUDIT.md. AMD's official ROCm table identifies RX 6600 as gfx1032, while README emphasizes gfx1030; exact compatibility requires testing."
     }
   ]
 }
