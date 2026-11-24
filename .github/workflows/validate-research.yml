@@ -58,7 +58,9 @@ jobs:
             ) | Out-Null
             if ($parseErrors.Count -gt 0) {
               Write-Host "Windows PowerShell 5.1 syntax errors in $path"
-              $parseErrors | Format-List * | Out-String | Write-Host
+              foreach ($parseError in $parseErrors) {
+                Write-Host ("Line " + $parseError.Extent.StartLineNumber + ", column " + $parseError.Extent.StartColumnNumber + ": " + $parseError.Message + " token=[" + $parseError.Extent.Text + "]")
+              }
               throw "Windows PowerShell 5.1 could not parse $path."
             }
           }
