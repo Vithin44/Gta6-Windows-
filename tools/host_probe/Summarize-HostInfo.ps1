@@ -45,7 +45,7 @@ $commitLimit = Get-Prop $report.memory "commitLimitBytes"
 $committed = Get-Prop $report.memory "committedBytes"
 $commitLeft = $null
 if ($null -ne $commitLimit -and $null -ne $committed) {
-    $commitLeft = [math]::Max(0, [double]$commitLimit - [double]$committed)
+    $commitLeft = [math]::Max([double]0, [double]$commitLimit - [double]$committed)
 }
 
 Write-Host ""
