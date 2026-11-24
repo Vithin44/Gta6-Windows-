@@ -34,7 +34,7 @@
 
 **Status: probe implemented; target-PC execution pending**
 
-A first read-only PowerShell inventory script is committed. It records OS, CPU, RAM, GPU driver and disk capacity; optional Vulkan summary capture is available. D3D12 shader-model and mesh-shader checks are not implemented yet.
+The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags (including AVX2, CLWB, CLZERO, MONITORX/MWAITX and SSE4A), RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. The native probe is queued for Windows CI compilation; it has not yet been run on the target PC.
 
 Create a read-only Windows host probe. First target the user's reported hardware:
 
@@ -43,7 +43,7 @@ Create a read-only Windows host probe. First target the user's reported hardware
 - 16 GB system RAM;
 - 1 TB SATA SSD.
 
-The probe must collect actual Windows version, AVX2 availability, installed/committed memory, GPU driver and VRAM, D3D12 shader model/mesh-shader tier, Vulkan extensions/subgroup properties and free disk space.
+The probe must collect actual Windows version, CPU feature flags, installed/committed memory, GPU driver and VRAM, D3D12 shader model/mesh-shader tier, Vulkan extensions/subgroup properties and free disk space. The current Vulkan capture is summary text; structured extension/subgroup parsing remains future work.
 
 **Exit evidence:** a timestamped JSON and readable summary. No upstream runtime launched; no SDK or driver installed; no game folders scanned.
 
