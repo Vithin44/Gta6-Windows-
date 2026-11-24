@@ -104,11 +104,11 @@ class NormalizeUpstreamTests(unittest.TestCase):
             source = Path(directory) / "crashes.log"
             console = Path(directory) / "console.txt"
             source.write_text(
-                "unix time 1795521600, process 1234\\n"
-                "VIctory: unhandled exception 0xc0000005 at 0x12345678\\n",
+                "unix time 1795521600, process 1234\n"
+                "VIctory: unhandled exception 0xc0000005 at 0x12345678\n",
                 encoding="utf-8",
             )
-            console.write_text("mapped at 0x100000\\n", encoding="utf-8")
+            console.write_text("mapped at 0x100000\n", encoding="utf-8")
             args = common_args(source, "victory")
             args.console_log = console
             args.run_start_utc = "2026-11-24T13:00:00Z"
