@@ -55,6 +55,7 @@ Write-Host "Windows:   $($report.operatingSystem.caption) (build $($report.opera
 Write-Host "CPU:       $(Get-Prop $cpu 'name')"
 Write-Host "CPU flags: AVX2=$(Get-Prop $nativeCpu 'avx2_hardware'); AVX state=$(Get-Prop $nativeCpu 'avx_os_state_enabled'); CLWB=$(Get-Prop $nativeCpu 'clwb'); CLZERO=$(Get-Prop $nativeCpu 'clzero'); MONITORX=$(Get-Prop $nativeCpu 'monitorx'); SSE4A=$(Get-Prop $nativeCpu 'sse4a')"
 Write-Host "RAM:       $(Format-Gb $report.memory.totalPhysicalBytes)"
+Write-Host "RAM free:  $(Format-Gb ([double]$report.memory.freePhysicalMemoryKb * 1KB)) (available $($report.memory.availableMBytes) MB)"
 Write-Host "Committed: $(Format-Gb $committed) / $(Format-Gb $commitLimit)"
 Write-Host "Commit left: $(Format-Gb $commitLeft)"
 Write-Host "Pagefile:  $(Get-Prop $report.memory 'pageFileAllocatedMb') MB allocated; $(Get-Prop $report.memory 'pageFileCurrentUsageMb') MB in use"
