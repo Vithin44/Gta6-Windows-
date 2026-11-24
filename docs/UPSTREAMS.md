@@ -36,6 +36,7 @@ The manifest stores these states in `manifests/upstreams.json`. A null Leonida S
 - A later comment on that issue describes a separate 12 GB GPU run with 32 GB system RAM reaching roughly 40 GB private commit and stalling in shader pipeline work. Treat memory/commit pressure as a major risk for a 16 GB host, not as a proven hard minimum.
 - The issue's run revision is `a6f5f7a` plus locally applied files from PRs; it is not the same evidence as our pinned source snapshot.
 - Its own Windows CI builds the workspace and runs unit/integration tests without a GPU or game data. The upstream CI explicitly skips the retail title end-to-end test; game-data tests are skipped when their sample variables are unset, and unsupported GPU tests report SKIPPED.
+- Our isolated smoke workflow reran the pinned revision: 700 tests passed, 0 failed, 41 ignored. The hosted Windows runner skipped 86 GPU tests for lack of Wave64 and 2 for lack of GPU UMA. This is not an RX 6600 GPU test.
 - `THIRD_PARTY.md` lists additional provenance and compatibility constraints. It explicitly warns against bringing GPL-3.0/LGPL-3.0 code into this GPL-2.0-only project.
 
 ## VIctory
@@ -48,6 +49,7 @@ The manifest stores these states in `manifests/upstreams.json`. A null Leonida S
 - The current loader crash handler contains compatibility emulation for selected Zen 2-specific instructions on other CPUs: CLZERO, MONITORX/MWAITX, selected CLWB patterns and SSE4A operations. This reduces some instruction-set blockers but does not prove every CPU path or performance is compatible. AVX2 remains a stated requirement.
 - The run path writes crash diagnostics to `crashes.log`; the loader maps the PE through Windows to preserve TLS/unwind behavior and resolves imports through HLE, host and title DLLs.
 - The README documents `cargo test --workspace` as a no-game-data test suite. The repository pins Rust 1.98.1 in `rust-toolchain.toml`.
+- Our isolated smoke workflow ran `cargo test --workspace --locked` at the pinned revision: 264 tests passed, 0 failed, 4 ignored. No title data was configured or used.
 - No stable, versioned JSON run-report format was found in the inspected source. Our adapter therefore imports the text crash log and optional console output conservatively; it does not infer visual progress.
 
 ## Leonida
@@ -61,6 +63,10 @@ The manifest stores these states in `manifests/upstreams.json`. A null Leonida S
 - The README estimates about 400 GiB free for the full asset export. A reduced `check,shaders,runtime` workflow is estimated around 30 GiB; the large `assets` stage is optional for runtime startup. Measure free disk space before attempting either.
 - Third-party provenance includes the `rpf9-explorer` submodule, Mesa-derived reference material, Microsoft's libHttpClient implementation, LLVM and SPIRV-Tools. Each component and submodule needs its own license/revision record before code reuse.
 - The README says the project does not distribute the game, keys or executable and does not decrypt or bypass protection. Any local package use must follow the project's own requirements and applicable law.
+
+## Our isolated smoke-test result
+
+Workflow [run #2](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45329732775) completed successfully on Windows Server 2025. XCL and VIctory were cloned at the exact revisions above into separate temporary folders; no upstream source was committed into this repository. Test logs are retained as 14-day workflow artifacts. These are software build/unit/integration results on a hosted runner, not evidence that either runtime works on the user's PC or that GTA VI is playable.
 
 ## License and integration constraints
 
