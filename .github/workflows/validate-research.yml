@@ -88,6 +88,31 @@ jobs:
           path: tools/host_probe/host_caps.exe
           if-no-files-found: error
           retention-days: 14
+      - name: Assemble standalone host probe bundle
+        shell: pwsh
+        run: |
+          $bundle = Join-Path $env:RUNNER_TEMP "host-probe-bundle"
+          $probeDirectory = Join-Path $bundle "tools\host_probe"
+          New-Item -ItemType Directory -Path $probeDirectory -Force | Out-Null
+          Copy-Item tools\host_probe\host_caps.exe $probeDirectory
+          Copy-Item tools\host_probe\Collect-HostInfo.ps1 $probeDirectory
+          Copy-Item tools\host_probe\Summarize-HostInfo.ps1 $probeDirectory
+          $hash = (Get-FileHash tools\host_probe\host_caps.exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          $readme = Get-Content tools\host_probe\README.txt -Raw
+          $readme = $readme.Replace("%GITHUB_SHA%", $env:GITHUB_SHA)
+          $readme = $readme.Replace("%GITHUB_SERVER_URL%", $env:GITHUB_SERVER_URL)
+          $readme = $readme.Replace("%GITHUB_REPOSITORY%", $env:GITHUB_REPOSITORY)
+          $readme = $readme.Replace("%GITHUB_RUN_ID%", $env:GITHUB_RUN_ID)
+          $readme = $readme.Replace("%HOST_CAPS_SHA256%", $hash)
+          Set-Content -LiteralPath (Join-Path $bundle "README.txt") -Value $readme -Encoding utf8
+          Write-Host "host_caps.exe SHA-256: $hash"
+      - name: Upload standalone host probe bundle
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: windows-host-probe-bundle
+          path: ${{ runner.temp }}/host-probe-bundle
+          if-no-files-found: error
+          retention-days: 14
       - name: Execute native probe on the CI host
         shell: pwsh
         run: |
