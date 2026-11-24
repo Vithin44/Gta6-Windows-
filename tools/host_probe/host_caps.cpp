@@ -59,7 +59,7 @@ struct CpuInfo {
     std::string brand;
     bool avx = false;
     bool avx2_hardware = false;
-    bool avx2_os_enabled = false;
+    bool avx_os_state_enabled = false;
     bool sse4a = false;
     bool clwb = false;
     bool clzero = false;
@@ -89,7 +89,7 @@ static CpuInfo query_cpu() {
         const bool osxsave = (r[2] & (1 << 27)) != 0;
         if (info.avx && osxsave) {
             const unsigned __int64 xcr0 = _xgetbv(0);
-            info.avx2_os_enabled = (xcr0 & 0x6) == 0x6;
+            info.avx_os_state_enabled = (xcr0 & 0x6) == 0x6;
         }
     }
 
@@ -279,7 +279,7 @@ int main() {
         << "    \"brand\": \"" << json_escape(cpu.brand) << "\",\n"
         << "    \"avx\": " << (cpu.avx ? "true" : "false") << ",\n"
         << "    \"avx2_hardware\": " << (cpu.avx2_hardware ? "true" : "false") << ",\n"
-        << "    \"avx2_os_enabled\": " << (cpu.avx2_os_enabled ? "true" : "false") << ",\n"
+        << "    \"avx_os_state_enabled\": " << (cpu.avx_os_state_enabled ? "true" : "false") << ",\n"
         << "    \"sse4a\": " << (cpu.sse4a ? "true" : "false") << ",\n"
         << "    \"clwb\": " << (cpu.clwb ? "true" : "false") << ",\n"
         << "    \"clzero\": " << (cpu.clzero ? "true" : "false") << ",\n"
