@@ -99,6 +99,7 @@ jobs:
           Copy-Item tools\host_probe\host_caps.exe $probeDirectory
           Copy-Item tools\host_probe\Collect-HostInfo.ps1 $probeDirectory
           Copy-Item tools\host_probe\Summarize-HostInfo.ps1 $probeDirectory
+          Copy-Item tools\host_probe\Run-HostProbe.bat $bundle
           $hash = (Get-FileHash tools\host_probe\host_caps.exe -Algorithm SHA256).Hash.ToLowerInvariant()
           $readme = Get-Content tools\host_probe\README.txt -Raw
           $readme = $readme.Replace("%GITHUB_SHA%", $env:GITHUB_SHA)

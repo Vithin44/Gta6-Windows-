@@ -4,13 +4,11 @@ Built from: %GITHUB_SHA%
 Workflow run: %GITHUB_SERVER_URL%/%GITHUB_REPOSITORY%/actions/runs/%GITHUB_RUN_ID%
 
 1. Extract the entire artifact ZIP to a folder on your Windows PC.
-2. Open PowerShell in the extracted folder (the folder containing this README.txt).
-3. Run the inventory and native CPU/D3D12 probe:
+2. Double-click `Run-HostProbe.bat` in the extracted folder. It runs the read-only inventory and prints a readable summary.
+
+Manual PowerShell alternative (run from the folder containing this README.txt):
 
    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\host_probe\Collect-HostInfo.ps1 -IncludeD3D12Info
-
-4. Print the readable summary:
-
    powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\host_probe\Summarize-HostInfo.ps1
 
 The JSON report is saved to .\reports\host-probe.json.
