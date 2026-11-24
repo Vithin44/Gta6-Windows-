@@ -1,11 +1,15 @@
 # Summarize a previously collected host-probe JSON report.
 [CmdletBinding()]
 param(
-    [string]$InputPath = (Join-Path $PSScriptRoot "..\..\reports\host-probe.json")
+    [string]$InputPath
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+
+if ([string]::IsNullOrWhiteSpace($InputPath)) {
+    $InputPath = Join-Path $PSScriptRoot "..\..\reports\host-probe.json"
+}
 
 function Get-Prop {
     param([object]$Object, [string]$Name)

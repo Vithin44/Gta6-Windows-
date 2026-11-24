@@ -2,13 +2,17 @@
 # This script does not scan for game files, install software, change settings, or launch a game.
 [CmdletBinding()]
 param(
-    [string]$OutputPath = (Join-Path $PSScriptRoot "..\..\reports\host-probe.json"),
+    [string]$OutputPath,
     [switch]$IncludeVulkanInfo,
     [switch]$IncludeD3D12Info
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
+
+if ([string]::IsNullOrWhiteSpace($OutputPath)) {
+    $OutputPath = Join-Path $PSScriptRoot "..\..\reports\host-probe.json"
+}
 
 function Get-SafeProperty {
     param(
