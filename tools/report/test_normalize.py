@@ -30,6 +30,7 @@ def common_args(source: Path, upstream: str) -> Namespace:
         privacy_reviewed=True,
         output=source.with_suffix(".normalized.json"),
         console_log=None,
+        run_start_utc=None,
     )
 
 
