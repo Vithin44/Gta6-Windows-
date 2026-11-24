@@ -91,6 +91,18 @@ jobs:
           } finally {
             Pop-Location
           }
+      - name: Build VIctory workspace (no title data)
+        shell: pwsh
+        run: |
+          Push-Location upstream/victory
+          try {
+            cargo build --workspace --locked *> ..\..\victory-build.log
+            $code = $LASTEXITCODE
+            Get-Content ..\..\victory-build.log
+            if ($code -ne 0) { exit $code }
+          } finally {
+            Pop-Location
+          }
       - name: Run upstream workspace tests (no title data)
         shell: pwsh
         run: |
@@ -103,11 +115,11 @@ jobs:
           } finally {
             Pop-Location
           }
-      - name: Upload VIctory test log
+      - name: Upload VIctory build and test logs
         if: always()
         uses: actions/upload-artifact@v7.0.2
         with:
           name: victory-smoke-log
-          path: victory-test.log
+          path: victory-*.log
           if-no-files-found: ignore
           retention-days: 14
