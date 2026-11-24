@@ -38,9 +38,9 @@ The host probe has not yet been run on the target PC. Leonida's exact commit and
 
 ## Roadmap
 
-1. Finish revision-pinned source and license audits.
-2. Build a read-only Windows capability probe for the target PC.
-3. Add independent upstream checkouts and reproducible synthetic builds/tests.
+1. Finish the remaining Leonida revision and dependency/license audit.
+2. Run the Windows capability probe on the target PC.
+3. Build VIctory and XCL independently with synthetic/unit tests.
 4. Normalize test reports and compare loader/graphics behavior.
 5. Evaluate authorized local-data workflows only where supported by the upstream projects.
 6. Track runtime startup, rendering and gameplay as separate evidence gates.
@@ -53,7 +53,8 @@ See [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) for milestone exit crit
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — proposed independent integration architecture.
 - [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) — milestones, blockers and evidence gates.
 - [docs/FEATURE_MATRIX.md](docs/FEATURE_MATRIX.md) — source-level comparison of the three upstreams.
-- [docs/HOST_PROBE.md](docs/HOST_PROBE.md) — how to collect a read-only Windows hardware inventory.\n- [docs/REPORTS.md](docs/REPORTS.md) — how to normalize and validate upstream diagnostic logs.
+- [docs/HOST_PROBE.md](docs/HOST_PROBE.md) — how to collect a read-only Windows hardware inventory.
+- [docs/REPORTS.md](docs/REPORTS.md) — how to normalize and validate upstream diagnostic logs.
 - [CONTRIBUTING.md](CONTRIBUTING.md) — security, provenance and contribution rules.
 - [manifests/upstreams.json](manifests/upstreams.json) — machine-readable upstream records.
 - [schemas/run-report.schema.json](schemas/run-report.schema.json) — normalized test-report schema.
