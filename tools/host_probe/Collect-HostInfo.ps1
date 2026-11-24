@@ -200,4 +200,8 @@ $json = $report | ConvertTo-Json -Depth 10
 
 Write-Host "Host inventory saved to: $resolvedOutputPath"
 Write-Host "This probe did not scan game files, launch a game, install software, or change system settings."
-Write-Host "For CPU instruction flags and D3D12 feature levels, build host_caps.exe and rerun with -IncludeD3D12Info."
+if (-not $IncludeD3D12Info) {
+    Write-Host "For CPU instruction flags and D3D12 feature levels, rerun with -IncludeD3D12Info."
+} elseif (-not $d3d12.queried) {
+    Write-Warning ("The native D3D12 probe did not complete: " + [string]$d3d12.error)
+}

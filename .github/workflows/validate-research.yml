@@ -41,6 +41,28 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v7.0.1
+      - name: Parse host scripts in Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          $paths = @(
+            "tools/host_probe/Collect-HostInfo.ps1",
+            "tools/host_probe/Summarize-HostInfo.ps1"
+          )
+          foreach ($path in $paths) {
+            $tokens = $null
+            $parseErrors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              (Resolve-Path $path).Path,
+              [ref]$tokens,
+              [ref]$parseErrors
+            ) | Out-Null
+            if ($parseErrors.Count -gt 0) {
+              Write-Error "Windows PowerShell 5.1 syntax errors in $path"
+              $parseErrors | Format-List
+              exit 1
+            }
+          }
+          Write-Host "Both scripts parse in Windows PowerShell 5.1."
       - name: Parse PowerShell without running it
         shell: pwsh
         run: |
