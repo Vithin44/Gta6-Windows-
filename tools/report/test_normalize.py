@@ -58,6 +58,8 @@ class NormalizeUpstreamTests(unittest.TestCase):
                 "processors": [{"name": "AMD Ryzen 5 5500"}],
                 "memory": {
                     "totalPhysicalBytes": 17179869184,
+                    "freePhysicalMemoryKb": 8388608,
+                    "availableMBytes": 8192,
                     "committedBytes": 8589934592,
                     "commitLimitBytes": 34359738368,
                 },
@@ -89,6 +91,8 @@ class NormalizeUpstreamTests(unittest.TestCase):
 
             self.assertEqual("Windows 11", report["host"]["os"])
             self.assertEqual(16384, report["host"]["ram_total_mb"])
+            self.assertEqual(8192, report["host"]["ram_free_mb"])
+            self.assertEqual(8192, report["host"]["ram_available_mb"])
             self.assertEqual(8192, report["host"]["committed_mb"])
             self.assertEqual(32768, report["host"]["commit_limit_mb"])
             self.assertEqual(24576, report["host"]["commit_remaining_mb"])
