@@ -35,7 +35,7 @@
 
 **Status: Windows artifact build configured; target-PC execution pending**
 
-The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags, RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. GitHub Actions now builds and publishes a ready-to-run Windows executable artifact. Earlier compile/parser checks passed; the new artifact workflow is being validated. The probe has not yet been run on the target PC.
+The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags, RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. GitHub Actions now builds and publishes a ready-to-run Windows executable artifact. Windows CI successfully built and published the `windows-host-probe` artifact (run #17, expires 2026-12-08). The probe has not yet been run on the target PC.
 
 Create a read-only Windows host probe. First target the user's reported hardware:
 
@@ -62,11 +62,11 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 
 ## Milestone 4 — Shared report and diagnostics tooling
 
-**Status: schema, validator, XCL and VIctory adapters implemented; CI tests pending**
+**Status: schema, validator, XCL and VIctory adapters implemented; CI tests passing**
 
 - [x] Implement a versioned JSON run-report schema.
 - [x] Add a validator for project-owned reports and a synthetic fixture.
-- [x] Validate the manifest, report fixture and PowerShell syntax in GitHub Actions; compile the native C++ probe in Windows CI.
+- [x] Validate the manifest, report fixture and PowerShell syntax in GitHub Actions; build and publish the native C++ probe artifact in Windows CI.
 - [x] Add conservative normalizers for XCL report.json and VIctory crash/console logs.
 - [ ] Add a Leonida adapter after its test artifact formats and exact revision are verified.
 - [ ] Preserve original logs; normalized reports link to local copies instead of replacing them.
