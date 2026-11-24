@@ -162,6 +162,20 @@
             "null"
           ],
           "minimum": 0
+        },
+        "ram_free_mb": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "ram_available_mb": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
         }
       },
       "additionalProperties": false
