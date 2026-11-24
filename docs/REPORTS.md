@@ -33,10 +33,10 @@ The adapter maps the exit/crash state and module/stub counts. It deliberately do
 VIctory writes `crashes.log` when a crash or panic is reported. If you also saved the console output, provide both files:
 
 ```powershell
-python tools/report/normalize_upstream.py victory "D:\logs\victory\crashes.log" --console-log "D:\logs\victory\console.txt" --input-class user_owned_local_data --output "D:\logs\normalized-victory.json"
+python tools/report/normalize_upstream.py victory "D:\logs\victory\crashes.log" --console-log "D:\logs\victory\console.txt" --run-start-utc "2026-11-24T13:00:00Z" --input-class user_owned_local_data --output "D:\logs\normalized-victory.json"
 ```
 
-The adapter recognizes explicit loader mapping and title-exit markers. A crash log alone proves only that the run produced a crash report; it does not prove which visual stage was reached.
+The adapter recognizes explicit loader mapping and title-exit markers. VIctory appends to its crash log, so use a run-specific copy or provide `--run-start-utc` to ignore older entries. A crash log alone proves only that the run produced a crash report; it does not prove which visual stage was reached.
 
 ## Input classification
 
