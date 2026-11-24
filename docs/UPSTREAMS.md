@@ -51,7 +51,7 @@ The manifest stores these states in `manifests/upstreams.json`. Null Leonida and
 - The current loader crash handler contains compatibility emulation for selected Zen 2-specific instructions on other CPUs: CLZERO, MONITORX/MWAITX, selected CLWB patterns and SSE4A operations. This reduces some instruction-set blockers but does not prove every CPU path or performance is compatible. AVX2 remains a stated requirement.
 - The run path writes crash diagnostics to `crashes.log`; the loader maps the PE through Windows to preserve TLS/unwind behavior and resolves imports through HLE, host and title DLLs.
 - The README documents `cargo test --workspace` as a no-game-data test suite. The repository pins Rust 1.98.1 in `rust-toolchain.toml`.
-- Our isolated smoke workflow ran `cargo test --workspace --locked` at the pinned revision: 264 tests passed, 0 failed, 4 ignored. No title data was configured or used.
+- Our first isolated smoke run at the pinned revision reported 264 tests passed, 0 failed, 4 ignored. A later repeat on the same pinned revision built successfully but the `victory-shader` test process terminated with Windows `0xc0000005` (access violation) after several tests, without a Rust assertion failure. XCL passed again. This makes VIctory's test result non-deterministic in our hosted Windows runner; we are rerunning its workspace suite single-threaded to isolate a possible race or unsafe-code issue. No title data was configured or used.
 - No stable, versioned JSON run-report format was found in the inspected source. Our adapter therefore imports the text crash log and optional console output conservatively; it does not infer visual progress.
 
 ## DedSec — preliminary only

@@ -58,12 +58,12 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 - [x] Keep each upstream in its own ephemeral checkout and build directory; no upstream source is committed here.
 - [x] Restrict XCL tests to the upstream-supported no-title-data suite and skip its retail title end-to-end test.
 - [x] Build VIctory with `cargo build --workspace --locked`, then run its documented `cargo test --workspace --locked` suite; no title data is used.
-- [x] Capture successful build/test logs and confirm skipped GPU tests are clearly reported. XCL: 700 passed, 0 failed, 41 ignored; 86 GPU tests skipped for no Wave64 and 2 for no GPU UMA. VIctory: 264 passed, 0 failed, 4 ignored.
+- [x] Capture build/test logs and confirm skipped GPU tests are clearly reported. XCL: 700 passed, 0 failed, 41 ignored; 86 GPU tests skipped for no Wave64 and 2 for no GPU UMA. VIctory initially passed 264/0/4 on run #2, but a repeat on run #5 built successfully and then crashed in `victory-shader` with Windows `0xc0000005`; single-threaded rerun is in progress.
 - [ ] Add Leonida only after its exact revision and full dependency/license provenance can be verified.
 - [ ] Add DedSec to CI only after the repository is reachable and its license, submodules and source provenance are verified.
 - [ ] Do not build or run leaked executables or unknown prebuilt binaries.
 
-**Exit evidence:** [successful workflow run #2](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45329732775) and its 14-day log artifacts. The tests used no title data and ran on a hosted Windows Server 2025 runner; XCL GPU tests skipped because that runner has no Wave64/GPU UMA. Leonida remains blocked on exact source revision and dependency provenance. DedSec is a preliminary README-only candidate: its README marks boot pending and play not achieved, while source/API access returned 404; see `docs/DEDSEC_AUDIT.md`.
+**Exit evidence:** [first successful smoke run #2](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45329732775); [repeat run #5](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45330985025) exposed a VIctory shader-test access violation after a successful build. The rerun uses one test thread to investigate. All tests use no title data and run on hosted Windows Server 2025. XCL GPU tests skip because that runner has no Wave64/GPU UMA. Leonida remains blocked on exact source revision and dependency provenance. DedSec is a preliminary README-only candidate: its README marks boot pending and play not achieved, while source/API access returned 404; see `docs/DEDSEC_AUDIT.md`.
 
 ## Milestone 4 — Shared report and diagnostics tooling
 

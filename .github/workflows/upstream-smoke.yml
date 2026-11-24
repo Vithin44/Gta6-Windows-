@@ -108,7 +108,7 @@ jobs:
         run: |
           Push-Location upstream/victory
           try {
-            cargo test --workspace --locked -- --test-threads=4 *> ..\..\victory-test.log
+            cargo test --workspace --locked -- --test-threads=1 *> ..\..\victory-test.log
             $code = $LASTEXITCODE
             Get-Content ..\..\victory-test.log
             if ($code -ne 0) { exit $code }
