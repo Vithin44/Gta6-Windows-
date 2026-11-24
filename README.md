@@ -32,9 +32,9 @@ The projects remain separate. Their code is not being blindly copied or combined
 
 **Status:** research and architecture stage
 
-The repository now contains an upstream audit, a source-level feature matrix, an integration architecture, a staged execution plan, contribution rules, an upstream manifest, a normalized run-report schema and a read-only Windows host probe. GitHub Actions has compiled the native CPU/D3D12 probe and validated the PowerShell syntax and synthetic report.
+The repository now contains an upstream audit, a source-level feature matrix, an integration architecture, a staged execution plan, contribution rules, a pinned upstream manifest where source access permits, a normalized run-report schema, XCL/VIctory report adapters and a read-only Windows host probe. GitHub Actions validates the synthetic report and adapter tests, parses the PowerShell script, and builds a downloadable Windows probe executable.
 
-The host probe has not yet been run on the target PC. No GTA VI launch or gameplay has been performed by this repository. Upstream status statements are attributed to their respective projects and are not our own test results.
+The host probe has not yet been run on the target PC. Leonida's exact commit and full dependency/license provenance are still unpinned. No GTA VI launch or gameplay has been performed by this repository. Upstream status statements are attributed to their respective projects and are not our own test results.
 
 ## Roadmap
 
@@ -53,14 +53,14 @@ See [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) for milestone exit crit
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — proposed independent integration architecture.
 - [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) — milestones, blockers and evidence gates.
 - [docs/FEATURE_MATRIX.md](docs/FEATURE_MATRIX.md) — source-level comparison of the three upstreams.
-- [docs/HOST_PROBE.md](docs/HOST_PROBE.md) — how to collect a read-only Windows hardware inventory.
+- [docs/HOST_PROBE.md](docs/HOST_PROBE.md) — how to collect a read-only Windows hardware inventory.\n- [docs/REPORTS.md](docs/REPORTS.md) — how to normalize and validate upstream diagnostic logs.
 - [CONTRIBUTING.md](CONTRIBUTING.md) — security, provenance and contribution rules.
 - [manifests/upstreams.json](manifests/upstreams.json) — machine-readable upstream records.
 - [schemas/run-report.schema.json](schemas/run-report.schema.json) — normalized test-report schema.
 
 ## Hardware target
 
-The user has reported an AMD Ryzen 5 5500, Radeon RX 6600, 16 GB RAM and a 1 TB SATA SSD. These are unverified starting details, not a compatibility verdict. The actual Windows build, driver, API features, available committed memory and free disk space must be measured before selecting a runtime or starting a large build.
+The user has reported an AMD Ryzen 5 5500, Radeon RX 6600, 16 GB RAM and a 1 TB SATA SSD. These are unverified starting details, not a compatibility verdict. The actual Windows build, driver, API features, available committed memory and free disk space must be measured before selecting a runtime or starting a large build. XCL issue reports describe 36–40 GB commit growth during world loading on other systems, so 16 GB RAM is a significant risk. Leonida estimates about 30 GiB for a reduced check/shader/runtime build and about 400 GiB for its full asset stage; do not start the full stage without checking free space.
 
 ## License
 
