@@ -180,16 +180,24 @@ static AdapterResult query_adapter(IDXGIAdapter1* adapter) {
     result.dedicated_video_memory = static_cast<unsigned long long>(desc.DedicatedVideoMemory);
 
     ComPtr<ID3D12Device> device;
-    HRESULT hr = D3D12CreateDevice(
-        adapter,
-        D3D_FEATURE_LEVEL_11_0,
-        IID_PPV_ARGS(&device)
-    );
+    const D3D_FEATURE_LEVEL levels[] = {
+        D3D_FEATURE_LEVEL_12_2,
+        D3D_FEATURE_LEVEL_12_1,
+        D3D_FEATURE_LEVEL_12_0,
+        D3D_FEATURE_LEVEL_11_1,
+        D3D_FEATURE_LEVEL_11_0
+    };
+    HRESULT hr = E_FAIL;
+    for (D3D_FEATURE_LEVEL level : levels) {
+        hr = D3D12CreateDevice(adapter, level, IID_PPV_ARGS(&device));
+        if (SUCCEEDED(hr)) {
+            result.d3d12_available = true;
+            result.feature_level = feature_level_name(level);
+            break;
+        }
+    }
     result.d3d12_create_hr = static_cast<long>(hr);
-    if (FAILED(hr)) return result;
-
-    result.d3d12_available = true;
-    result.feature_level = feature_level_name(device->GetFeatureLevel());
+    if (!result.d3d12_available) return result;
 
     const D3D_SHADER_MODEL candidates[] = {
         D3D_SHADER_MODEL_6_7,
