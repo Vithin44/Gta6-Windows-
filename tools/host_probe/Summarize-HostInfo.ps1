@@ -68,11 +68,11 @@ $clwb = Get-Prop $nativeCpu "clwb"
 $clzero = Get-Prop $nativeCpu "clzero"
 $monitorx = Get-Prop $nativeCpu "monitorx"
 $sse4a = Get-Prop $nativeCpu "sse4a"
-$cpuFlags = "AVX2={0}; AVX state={1}; CLWB={2}; CLZERO={3}; MONITORX={4}; SSE4A={5}" -f $avx2Hardware, $avxOsState, $clwb, $clzero, $monitorx, $sse4a
+$cpuFlags = "AVX2=$avx2Hardware; AVX state=$avxOsState; CLWB=$clwb; CLZERO=$clzero; MONITORX=$monitorx; SSE4A=$sse4a"
 $ramTotal = Format-Gb $report.memory.totalPhysicalBytes
 $ramFree = Format-Gb $ramFreeBytes
-$ramAvailableText = "available {0} MB" -f $ramAvailableMb
-$committedText = "{0} / {1}" -f (Format-Gb $committed), (Format-Gb $commitLimit)
+$ramAvailableText = "available $ramAvailableMb MB"
+$committedText = "$(Format-Gb $committed) / $(Format-Gb $commitLimit)"
 $commitLeftText = Format-Gb $commitLeft
 $pageFileAllocated = Get-Prop $report.memory "pageFileAllocatedMb"
 $pageFileCurrentUsage = Get-Prop $report.memory "pageFileCurrentUsageMb"
@@ -83,25 +83,26 @@ $waveOps = Get-Prop $nativeGpu "wave_ops"
 $waveLaneMin = Get-Prop $nativeGpu "wave_lane_min"
 $waveLaneMax = Get-Prop $nativeGpu "wave_lane_max"
 $meshTier = Get-Prop $nativeGpu "mesh_shader_tier"
+$gpuVramFormatted = Format-Gb $gpuVram
 
-Write-Host ("Collected: {0}" -f $collectedAt)
-Write-Host ("Windows:   {0} (build {1})" -f $osCaption, $osBuild)
-Write-Host ("CPU:       {0}" -f $cpuName)
-Write-Host ("CPU flags: {0}" -f $cpuFlags)
-Write-Host ("RAM:       {0}" -f $ramTotal)
-Write-Host ("RAM free:  {0} ({1})" -f $ramFree, $ramAvailableText)
-Write-Host ("Committed: {0}" -f $committedText)
-Write-Host ("Commit left: {0}" -f $commitLeftText)
-Write-Host ("Pagefile:  {0} MB allocated; {1} MB in use" -f $pageFileAllocated, $pageFileCurrentUsage)
-Write-Host ("GPU:       {0}" -f $gpuName)
-Write-Host ("GPU arch:  {0}" -f $gpuArch)
-Write-Host ("Driver:    {0}" -f $gpuDriver)
-Write-Host ("VRAM:      {0}" -f (Format-Gb $gpuVram))
-Write-Host ("D3D12:     {0}" -f $d3d12Available)
-Write-Host ("Shader:    {0}" -f $shaderModel)
-Write-Host ("WaveOps:   {0} (lanes {1}-{2})" -f $waveOps, $waveLaneMin, $waveLaneMax)
-Write-Host ("Mesh:      {0}" -f $meshTier)
-Write-Host ""
+Write-Host "Collected: $collectedAt"
+Write-Host "Windows:   $osCaption (build $osBuild)"
+Write-Host "CPU:       $cpuName"
+Write-Host "CPU flags: $cpuFlags"
+Write-Host "RAM:       $ramTotal"
+Write-Host "RAM free:  $ramFree ($ramAvailableText)"
+Write-Host "Committed: $committedText"
+Write-Host "Commit left: $commitLeftText"
+Write-Host "Pagefile:  $pageFileAllocated MB allocated; $pageFileCurrentUsage MB in use"
+Write-Host "GPU:       $gpuName"
+Write-Host "GPU arch:  $gpuArch"
+Write-Host "Driver:    $gpuDriver"
+Write-Host "VRAM:      $gpuVramFormatted"
+Write-Host "D3D12:     $d3d12Available"
+Write-Host "Shader:    $shaderModel"
+Write-Host "WaveOps:   $waveOps (lanes $waveLaneMin-$waveLaneMax)"
+Write-Host "Mesh:      $meshTier"
+
 
 
 $warnings = [System.Collections.Generic.List[string]]::new()
