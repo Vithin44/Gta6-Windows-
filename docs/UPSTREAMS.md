@@ -9,7 +9,7 @@ These projects overlap in their target platform and Xbox Series compatibility wo
 
 | Project | Declared license | Main approach | GTA VI status stated by upstream | Audit disposition |
 |---|---|---|---|---|
-| [XCL](https://github.com/ivall/xcl) | GPL-2.0-only | Native x64 execution; Xbox services/HLE; D3D12.X-to-host-D3D12; RDNA2-to-HLSL/DXIL | General Xbox Series compatibility layer. Its README reports other retail-title results, not a GTA VI result. | Independent reference/runtime candidate; no code import. |
+| [XCL](https://github.com/ivall/xcl) | GPL-2.0-only | Native x64 execution; Xbox services/HLE; D3D12.X-to-host-D3D12; RDNA2-to-HLSL/DXIL | General Xbox Series compatibility layer. Its README reports other retail-title results; issue #646 separately reports GTA VI reaching the language screen/loading art before world-loading failure. | Independent reference/runtime candidate; no code import. |
 | [VIctory](https://github.com/Marvisak/VIctory) | GPL-3.0-or-later | Native x64 loader; HLE; D3D12.X-to-host-D3D12; RDNA2-to-DXIL | README dated 2026-11-23 reports menus and loading into the world, but most world rendering is missing and the project is not playable. | Strongest documented GTA VI boot/rendering lead in this audit; investigate as a standalone upstream. |
 | [Leonida](https://github.com/ProjectLeonida/Leonida) | GPL-3.0 | Native recompilation; Xbox services; D3D12-to-Vulkan; RDNA2-to-SPIR-V | README says no playable game and lists boot as not working, while current issue/PR activity discusses retail startup blockers and runtime validation. Its hand-written status table may lag development. | Important GTA VI-specific shader, asset, Vulkan and test research; verify current main before relying on status. |
 
@@ -34,6 +34,7 @@ Before importing or pinning any source, refresh all three revisions and inspect 
 - Uses a PE loader, data-driven import resolver, HLE modules, virtual filesystem with copy-on-write overlay, and a report of unresolved/stubbed calls.
 - Its README describes D3D12.X graphics on host D3D12 and RDNA2 shader recompilation to HLSL/DXIL.
 - The README explicitly distinguishes presentation counters from proof of visible rendering.
+- Issue [#646](https://github.com/ivall/xcl/issues/646) reports GTA VI 1.0.2.1 reaching the language screen and rendering loading art on an RTX 3060 12 GB, then failing during world loading after memory growth (reported peak commit: 36 GB). This is an issue report, not a result independently reproduced here.
 - The handoff/design notes document a development/test environment with an RX 9070; this is not evidence that the same performance or feature coverage exists on an RX 6600.
 - `THIRD_PARTY.md` lists additional provenance and compatibility constraints. In particular, it says GPL-3.0 and LGPL-3.0 code cannot be incorporated into this GPL-2.0-only project.
 
@@ -44,6 +45,7 @@ Before importing or pinning any source, refresh all three revisions and inspect 
 - Its 2026-11-23 README reports first-boot screens, intro video, profile/saves and loading into the world. It also says the world is mostly dark, many shaders are not translated, frames are very slow, and entering the world on a real GPU can hang/reset the display driver.
 - The README reports testing on Windows 11 with an RX 6700 XT. That does not establish compatibility with every RDNA2 GPU.
 - The README says several GiB of available Windows commit are needed. Its diagnostic WARP mode is a software-rendering fallback, not a performance solution.
+- Current issues report illegal-instruction crashes on CPUs missing CLWB, CLZERO, MONITORX/MWAITX or SSE4A; issue #85 describes a proposed compatibility/emulation approach for an Intel host. The user's Ryzen 5 5500 officially lists AVX2 and SSE4A, but the remaining flags must be checked with CPUID before selecting a build.
 
 ### Leonida
 
@@ -68,6 +70,7 @@ Before importing or pinning any source, refresh all three revisions and inspect 
 - Obtain and pin Leonida's exact main commit and full license/provenance files.
 - Compare current loader/import/HLE coverage using source-level evidence, not README claims alone.
 - Compare shader translator test methodology and actual supported GPU features.
+- Track CPU feature compatibility (AVX2, CLWB, CLZERO, MONITORX/MWAITX, SSE4A) separately from GPU compatibility.
 - Inspect each project's CI workflows and test fixtures; separate tests requiring game data from tests that use synthetic fixtures.
 - Record any upstream code considered for reuse as a file-level provenance entry with original path, commit, license and intended modifications.
 - Keep all game executables, package files, keys, extracted assets, shader dumps and saves outside this repository.
