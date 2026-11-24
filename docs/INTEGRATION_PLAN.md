@@ -13,8 +13,9 @@
 - [x] Audit XCL and VIctory metadata, licenses and current documentation.
 - [x] Inspect Leonida's public GitHub page and README; record the connector limitation on exact revision capture.
 - [x] Define an independent orchestration architecture.
+- [x] Create a source-level feature matrix for XCL and VIctory, with Leonida status caveats.
 
-**Exit evidence:** `docs/UPSTREAMS.md` and `docs/ARCHITECTURE.md` committed.
+**Exit evidence:** `docs/UPSTREAMS.md`, `docs/ARCHITECTURE.md` and `docs/FEATURE_MATRIX.md` committed.
 
 ## Milestone 1 — Pin and deepen upstream audits
 
@@ -31,7 +32,9 @@
 
 ## Milestone 2 — Host capability inventory
 
-**Status: not started**
+**Status: probe implemented; target-PC execution pending**
+
+A first read-only PowerShell inventory script is committed. It records OS, CPU, RAM, GPU driver and disk capacity; optional Vulkan summary capture is available. D3D12 shader-model and mesh-shader checks are not implemented yet.
 
 Create a read-only Windows host probe. First target the user's reported hardware:
 
@@ -58,10 +61,11 @@ The probe must collect actual Windows version, AVX2 availability, installed/comm
 
 ## Milestone 4 — Shared report and diagnostics tooling
 
-**Status: not started**
+**Status: initial schema and validator implemented; upstream adapters pending**
 
-- [ ] Implement a versioned JSON run-report schema.
-- [ ] Add a validator/normalizer for reports voluntarily exported by the upstream tools.
+- [x] Implement a versioned JSON run-report schema.
+- [x] Add a validator for project-owned reports and a synthetic fixture.
+- [ ] Add a normalizer for reports voluntarily exported by the upstream tools.
 - [ ] Preserve original logs; normalized reports link to local copies instead of replacing them.
 - [ ] Record the exact commit, host, driver, test and stage for every run.
 - [ ] Add redaction for usernames and absolute paths before sharing reports.
