@@ -55,7 +55,7 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 - [x] Add pinned XCL and VIctory source references to an isolated GitHub Actions workflow.
 - [x] Keep each upstream in its own ephemeral checkout and build directory; no upstream source is committed here.
 - [x] Restrict XCL tests to the upstream-supported no-title-data suite and skip its retail title end-to-end test.
-- [x] Use VIctory's documented `cargo test --workspace --locked` suite, which requires no title data.
+- [x] Build VIctory with `cargo build --workspace --locked`, then run its documented `cargo test --workspace --locked` suite; no title data is used.
 - [x] Capture successful build/test logs and confirm skipped GPU tests are clearly reported. XCL: 700 passed, 0 failed, 41 ignored; 86 GPU tests skipped for no Wave64 and 2 for no GPU UMA. VIctory: 264 passed, 0 failed, 4 ignored.
 - [ ] Add Leonida only after its exact revision and full dependency/license provenance can be verified.
 - [ ] Do not build or run leaked executables or unknown prebuilt binaries.
@@ -75,7 +75,7 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 - [ ] Record the exact commit, host, driver, test and stage for every run.
 - [ ] Add redaction for usernames and absolute paths before sharing reports.
 
-**Exit evidence:** fixture reports from all three adapters validate without requiring any game files.
+**Exit evidence:** XCL and VIctory adapter fixtures validate without game files; Leonida remains pending until its export format is inspected at a pinned revision.
 
 ## Milestone 5 — Graphics and runtime comparison
 
@@ -147,17 +147,15 @@ Otherwise, keep this repository as an orchestration, comparison and diagnostics 
 | RX 6600 feature support not measured | A backend may fail before game-specific code runs | Host capability probe first |
 | 16 GB RAM vs upstream-reported 36–40 GB commit growth | XCL world-loading tests may exhaust commit or stall | Measure commit limit/free memory; do not start title runs until synthetic builds and memory requirements are understood |
 | Leonida full asset stage requires about 400 GiB free | A full asset build could consume most of the 1 TB SSD | Prefer the documented reduced check/shader/runtime stages first; measure free disk space |
-| 16 GB RAM vs upstream-reported 36–40 GB commit growth | XCL world-loading tests may exhaust commit or stall | Measure commit limit/free memory; do not start title runs until synthetic builds and memory requirements are understood |
-| Leonida full asset stage requires about 400 GiB free | A full asset build could consume most of the 1 TB SSD | Prefer the documented reduced check/shader/runtime stages first; measure free disk space |
 | 16 GB RAM and unknown free disk space | Build/runtime may exhaust commit or storage | Measure first; avoid full asset build by default |
 | Driver hang/reset risk | System instability or lost work | Synthetic tests, diagnostic fallback, stop on reset |
 | User data could be accidentally committed | Copyright/privacy/security risk | Keep all game data outside repo; ignore output folders |
 
 ## Immediate next actions
 
-1. Verify the Windows host-probe artifact workflow and retain its executable artifact.
-2. Obtain Leonida's exact commit and full license/submodule provenance through a verified source endpoint.
-3. Run the report-normalizer tests in CI and fix any regressions.
-4. Collect the target PC's CPU, RAM/commit, RX 6600 driver, D3D12 and Vulkan capabilities.
-5. Build VIctory and XCL independently using their own synthetic/unit tests before any authorized title-data workflow.
-6. Add a Leonida report adapter only after its progress-dashboard/test artifact format is inspected at a pinned revision.
+1. Finish the latest Windows CI run, verify the standalone host-probe bundle, and publish its current run link.
+2. Complete the new VIctory build-plus-test run and retain its build/test logs.
+3. Obtain Leonida's exact commit, full LICENSE and submodule/dependency provenance through a verified source endpoint; keep it excluded until then.
+4. Use the standalone probe once on the target PC to collect CPU flags, free/committed RAM, commit limit, RX 6600 driver, D3D12 features and optional Vulkan summary.
+5. Compare the real host report with VIctory's AVX2/SM 6.6/mesh requirements, XCL's memory pressure and Leonida's Vulkan/Wave64 requirements.
+6. Add Leonida report normalization and graphics-specific synthetic comparisons only after its source and artifact formats are pinned.
