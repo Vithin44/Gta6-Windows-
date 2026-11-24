@@ -1,0 +1,113 @@
+name: Independent upstream smoke tests
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * 1"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/upstream-smoke.yml"
+      - "manifests/upstreams.json"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  xcl:
+    name: XCL pinned build and synthetic/unit tests
+    runs-on: windows-2025
+    timeout-minutes: 60
+    env:
+      XCL_SHA: 64b3f35599bb7102f55d640e1a791e7d6dd3b175
+      CARGO_TERM_COLOR: always
+      CARGO_INCREMENTAL: 0
+    steps:
+      - name: Check out research workspace
+        uses: actions/checkout@v4
+      - name: Clone and pin XCL
+        shell: pwsh
+        run: |
+          git clone --no-tags https://github.com/ivall/xcl.git upstream/xcl
+          git -C upstream/xcl checkout --detach $env:XCL_SHA
+          git -C upstream/xcl rev-parse HEAD
+      - name: Install stable Rust
+        shell: pwsh
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustc --version
+          cargo --version
+      - name: Run upstream-supported build and tests (no title data)
+        shell: pwsh
+        run: |
+          Push-Location upstream/xcl
+          try {
+            & pwsh -NoProfile -File .\scripts\test.ps1 --skip test_title_runs_and_game_folder_is_untouched *> ..\..\xcl-test.log
+            $code = $LASTEXITCODE
+            Get-Content ..\..\xcl-test.log
+            if ($code -ne 0) { exit $code }
+          } finally {
+            Pop-Location
+          }
+      - name: Upload XCL test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcl-smoke-log
+          path: xcl-test.log
+          if-no-files-found: ignore
+          retention-days: 14
+
+  victory:
+    name: VIctory pinned workspace tests
+    runs-on: windows-2025
+    timeout-minutes: 60
+    env:
+      VICTORY_SHA: d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989
+      CARGO_TERM_COLOR: always
+      CARGO_INCREMENTAL: 0
+    steps:
+      - name: Check out research workspace
+        uses: actions/checkout@v4
+      - name: Clone and pin VIctory
+        shell: pwsh
+        run: |
+          git clone --no-tags https://github.com/Marvisak/VIctory.git upstream/victory
+          git -C upstream/victory checkout --detach $env:VICTORY_SHA
+          git -C upstream/victory rev-parse HEAD
+      - name: Install the pinned Rust toolchain
+        shell: pwsh
+        run: |
+          Push-Location upstream/victory
+          try {
+            rustup show active-toolchain
+            rustc --version
+            cargo --version
+          } finally {
+            Pop-Location
+          }
+      - name: Run upstream workspace tests (no title data)
+        shell: pwsh
+        run: |
+          Push-Location upstream/victory
+          try {
+            cargo test --workspace --locked -- --test-threads=4 *> ..\..\victory-test.log
+            $code = $LASTEXITCODE
+            Get-Content ..\..\victory-test.log
+            if ($code -ne 0) { exit $code }
+          } finally {
+            Pop-Location
+          }
+      - name: Upload VIctory test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: victory-smoke-log
+          path: victory-test.log
+          if-no-files-found: ignore
+          retention-days: 14
