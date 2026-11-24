@@ -50,6 +50,16 @@ The latest completed no-title-data smoke run on hosted Windows Server 2025 is [r
 
 See [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) for milestone exit criteria.
 
+## Getting the complete workspace
+
+The repository pins XCL and VIctory as separate Git submodules. Clone with:
+
+```powershell
+git clone --recurse-submodules https://github.com/Vithin44/Gta6-Windows-.git
+```
+
+Or initialize them after a normal clone with `git submodule update --init --recursive`. The submodules preserve their own histories and licenses; they are not merged into one executable. Leonida and DedSec remain documented candidates until their exact source revisions and provenance can be verified.
+
 ## Repository map
 
 - [docs/UPSTREAMS.md](docs/UPSTREAMS.md) — project comparison, licenses, revisions and audit gaps.

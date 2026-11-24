@@ -1,0 +1,6 @@
+[submodule "upstreams/xcl"]
+	path = upstreams/xcl
+	url = https://github.com/ivall/xcl.git
+[submodule "upstreams/victory"]
+	path = upstreams/victory
+	url = https://github.com/Marvisak/VIctory.git
