@@ -3,7 +3,8 @@
 [CmdletBinding()]
 param(
     [string]$OutputPath = (Join-Path $PSScriptRoot "..\..\reports\host-probe.json"),
-    [switch]$IncludeVulkanInfo
+    [switch]$IncludeVulkanInfo,
+    [switch]$IncludeD3D12Info
 )
 
 Set-StrictMode -Version Latest
@@ -28,7 +29,8 @@ $logicalDisks = @(Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DriveTyp
 
 $cpuFeatures = [ordered]@{
     avx2 = $null
-    note = "Null means this PowerShell/.NET runtime could not query AVX2; it does not mean AVX2 is absent."
+    nativeProbe = $null
+    note = "Null means this PowerShell/.NET runtime could not query AVX2; it does not mean AVX2 is absent. The native CPUID probe can report additional flags."
 }
 try {
     $avx2Type = [System.Type]::GetType("System.Runtime.Intrinsics.X86.Avx2, System.Private.CoreLib", $false)
@@ -84,6 +86,34 @@ if ($IncludeVulkanInfo) {
     }
 }
 
+$d3d12 = [ordered]@{
+    queried = $false
+    executableFound = $false
+    result = $null
+    error = $null
+}
+if ($IncludeD3D12Info) {
+    $capsExecutable = Join-Path $PSScriptRoot "host_caps.exe"
+    if (Test-Path -LiteralPath $capsExecutable) {
+        $d3d12.executableFound = $true
+        try {
+            $capsOutput = & $capsExecutable 2>&1 | Out-String
+            $capsExitCode = $LASTEXITCODE
+            if ($capsExitCode -eq 0) {
+                $d3d12.result = $capsOutput | ConvertFrom-Json
+                $d3d12.queried = $true
+                $cpuFeatures.nativeProbe = $d3d12.result.cpu
+            } else {
+                $d3d12.error = "host_caps.exe exit code $capsExitCode; output: $($capsOutput.Trim())"
+            }
+        } catch {
+            $d3d12.error = $_.Exception.Message
+        }
+    } else {
+        $d3d12.error = "host_caps.exe was not found. Build it using the instructions in docs/HOST_PROBE.md."
+    }
+}
+
 $report = [ordered]@{
     reportVersion = 1
     collectedAtUtc = (Get-Date).ToUniversalTime().ToString("o")
@@ -113,9 +143,10 @@ $report = [ordered]@{
     cpuFeatures = $cpuFeatures
     graphics = [ordered]@{
         adapters = @($gpus)
-        d3d12FeatureLevel = "not queried by this probe"
-        shaderModel = "not queried by this probe"
-        meshShaderTier = "not queried by this probe"
+        d3d12 = $d3d12
+        d3d12FeatureLevel = "See graphics.d3d12.result.adapters when queried"
+        shaderModel = "See graphics.d3d12.result.adapters when queried"
+        meshShaderTier = "See graphics.d3d12.result.adapters when queried"
         vulkan = $vulkan
     }
     fixedDisks = @($disks)
@@ -139,4 +170,4 @@ $json = $report | ConvertTo-Json -Depth 10
 
 Write-Host "Host inventory saved to: $resolvedOutputPath"
 Write-Host "This probe did not scan game files, launch a game, install software, or change system settings."
-Write-Host "D3D12 shader-model and mesh-shader feature checks are intentionally marked as not queried."
+Write-Host "For CPU instruction flags and D3D12 feature levels, build host_caps.exe and rerun with -IncludeD3D12Info."
