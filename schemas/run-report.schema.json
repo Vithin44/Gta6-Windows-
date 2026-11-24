@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/gta6-windows/run-report.schema.json",
+  "$id": "run-report.schema.json",
   "title": "GTA VI Windows Research Run Report",
   "description": "Project-owned evidence record. It must contain metadata and results only, never game files or extracted assets.",
   "type": "object",
