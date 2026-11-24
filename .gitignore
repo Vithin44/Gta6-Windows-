@@ -6,6 +6,11 @@
 /.cache/
 /artifacts/
 /reports/local/
+/reports/host-probe.json
+/reports/host-probe-*.json
+/upstream/
+/xcl-test.log
+/victory-test.log
 /local-data/
 /private-data/
 
