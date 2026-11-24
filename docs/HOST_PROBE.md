@@ -78,3 +78,8 @@ The PowerShell script collects system inventory only. The C++ program reads CPU 
 The native D3D12 probe records `WaveLaneCountMin` and `WaveLaneCountMax`. The readable summary warns when the maximum lane count is below 64 because VIctory documents that some world compute programs need 64-lane waves. It also notes that XCL documents a 32-lane emulation path, with performance and shader-behavior caveats. This is a capability warning, not a definitive incompatibility verdict; the actual runtime and shader path must still be tested.
 
 The CI workflow runs a synthetic 32-lane fixture to ensure the warning remains visible. The fixture is synthetic and does not represent the user's RX 6600.
+
+
+## One-click Windows runner
+
+The standalone CI artifact includes `Run-HostProbe.bat` at its root. Extract the ZIP and double-click it; it runs the read-only collector and summary without changing system settings. The wrapper was exercised end-to-end in CI on Windows PowerShell 5.1, including native probe execution and JSON output. Review `reports/host-probe.json` before sharing because it includes the PC name and hardware/software details.

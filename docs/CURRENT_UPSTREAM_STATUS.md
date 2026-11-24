@@ -49,16 +49,16 @@ The README emphasizes gfx1030, whereas AMD's official ROCm architecture table id
 
 ## What our CI has actually proven
 
-Completed [smoke run #6](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45331424599), on hosted Windows Server 2025, without GTA VI title data:
+Completed [smoke run #7](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45332131897), on hosted Windows Server 2025, without GTA VI title data:
 
 | Project | Pinned revision | Build/tests | Result |
 |---|---|---|---|
-| XCL | `64b3f35599bb7102f55d640e1a791e7d6dd3b175` | upstream-supported build and tests | 700 passed, 0 failed, 41 ignored; 86 GPU tests skipped for no Wave64 and 2 for no GPU UMA |
+| XCL | `d208e14b765f469f4b56301b78afa8dac5378339` | upstream-supported build and tests, including new shader-cache tests | 703 passed, 0 failed, 41 ignored; 86 GPU tests skipped for no Wave64 and 2 for no GPU UMA |
 | VIctory | `d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989` | workspace build + single-threaded tests | 264 passed, 0 failed, 4 ignored |
 
 VIctory's earlier parallel run crashed in `victory-shader` with Windows `0xc0000005`. The single-threaded pass suggests a possible concurrency-sensitive issue, but does not prove the cause or resolve the parallel-run failure.
 
-The next smoke run is pinned to XCL's newer main revision `d208e14b765f469f4b56301b78afa8dac5378339` to validate its new cache code. The host probe passed CI validation in [run #92](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45332397931); the [standalone bundle](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45332397931/artifacts/14892442322) has not yet been run on the target PC.
+The current XCL main revision and semantic shader-cache tests passed in run #7. The host probe passed CI validation in [run #105](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333503675); the [standalone bundle](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333503675/artifacts/14892907119) includes a one-click launcher tested on Windows PowerShell 5.1. It has not yet been run on the target PC.
 
 ## Integration decision
 

@@ -26,6 +26,10 @@ jobs:
         uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.12"
+      - name: Initialize pinned upstream submodules
+        run: git submodule update --init --recursive
+      - name: Verify submodule commits against the manifest
+        run: python tools/report/validate_submodules.py
       - name: Install report validator
         run: python -m pip install -r tools/report/requirements.txt
       - name: Validate upstream manifest JSON
