@@ -132,6 +132,10 @@ jobs:
         shell: pwsh
         run: |
           ./tools/host_probe/Summarize-HostInfo.ps1 -InputPath examples/host-probe/synthetic.json
+          $wave32Summary = (& ./tools/host_probe/Summarize-HostInfo.ps1 -InputPath examples/host-probe/synthetic-wave32.json *>&1 | Out-String)
+          if ($wave32Summary -notmatch "64-lane waves") {
+            throw "The host summary did not warn about a 32-lane-only GPU."
+          }
       - name: Exercise read-only inventory end to end on CI host
         shell: pwsh
         run: |

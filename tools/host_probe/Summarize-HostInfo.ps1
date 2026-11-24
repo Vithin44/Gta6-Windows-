@@ -103,6 +103,12 @@ if ($null -eq $nativeGpu) {
     if ((Get-Prop $nativeGpu "wave_ops") -ne $true) {
         $warnings.Add("D3D12 WaveOps were not confirmed.")
     }
+    $waveMax = Get-Prop $nativeGpu "wave_lane_max"
+    if ($null -eq $waveMax) {
+        $warnings.Add("D3D12 WaveOps lane range is unknown; native 64-lane wave support could not be confirmed.")
+    } elseif ([int]$waveMax -lt 64) {
+        $warnings.Add("D3D12 WaveOps max lane count is $waveMax; VIctory reports some world compute programs need 64-lane waves. XCL documents a 32-lane emulation path with performance and shader-behavior caveats.")
+    }
 }
 
 if ($null -ne $commitLimit -and [double]$commitLimit -lt 36GB) {

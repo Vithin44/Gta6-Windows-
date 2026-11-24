@@ -71,3 +71,10 @@ The JSON report includes the machine name, Windows version, CPU model, installed
 ## Safety
 
 The PowerShell script collects system inventory only. The C++ program reads CPU feature flags and enumerates graphics adapters/device capabilities. It does not scan game packages, extract assets, launch a game, install drivers/SDKs, change the page file, change settings, or make network requests. Build output `host_caps.exe` is ignored by Git.
+
+
+## Wave64 compatibility warning
+
+The native D3D12 probe records `WaveLaneCountMin` and `WaveLaneCountMax`. The readable summary warns when the maximum lane count is below 64 because VIctory documents that some world compute programs need 64-lane waves. It also notes that XCL documents a 32-lane emulation path, with performance and shader-behavior caveats. This is a capability warning, not a definitive incompatibility verdict; the actual runtime and shader path must still be tested.
+
+The CI workflow runs a synthetic 32-lane fixture to ensure the warning remains visible. The fixture is synthetic and does not represent the user's RX 6600.
