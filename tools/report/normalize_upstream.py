@@ -103,6 +103,8 @@ def host_record(host_path: Path | None) -> dict[str, Any]:
             feature_checks[key] = value
 
     total_ram = memory.get("totalPhysicalBytes")
+    free_ram_kb = memory.get("freePhysicalMemoryKb")
+    available_ram_mb = memory.get("availableMBytes")
     committed_bytes = memory.get("committedBytes")
     commit_limit_bytes = memory.get("commitLimitBytes")
     vram_bytes = native_gpu.get("dedicated_video_memory_bytes")
@@ -123,6 +125,8 @@ def host_record(host_path: Path | None) -> dict[str, Any]:
         "cpu": cpu_info.get("name") or native_cpu.get("brand"),
         "cpu_features": sorted(set(cpu_features)),
         "ram_total_mb": int(total_ram // (1024 * 1024)) if isinstance(total_ram, (int, float)) else None,
+        "ram_free_mb": int(free_ram_kb // 1024) if isinstance(free_ram_kb, (int, float)) else None,
+        "ram_available_mb": int(available_ram_mb) if isinstance(available_ram_mb, (int, float)) else None,
         "committed_mb": int(committed_bytes // (1024 * 1024)) if isinstance(committed_bytes, (int, float)) else None,
         "commit_limit_mb": int(commit_limit_bytes // (1024 * 1024)) if isinstance(commit_limit_bytes, (int, float)) else None,
         "commit_remaining_mb": (
