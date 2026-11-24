@@ -72,7 +72,9 @@ $cpuFlags = "AVX2=$avx2Hardware; AVX state=$avxOsState; CLWB=$clwb; CLZERO=$clze
 $ramTotal = Format-Gb $report.memory.totalPhysicalBytes
 $ramFree = Format-Gb $ramFreeBytes
 $ramAvailableText = "available $ramAvailableMb MB"
-$committedText = "$(Format-Gb $committed) / $(Format-Gb $commitLimit)"
+$committedValue = Format-Gb $committed
+$commitLimitValue = Format-Gb $commitLimit
+$committedText = "$committedValue / $commitLimitValue"
 $commitLeftText = Format-Gb $commitLeft
 $pageFileAllocated = Get-Prop $report.memory "pageFileAllocatedMb"
 $pageFileCurrentUsage = Get-Prop $report.memory "pageFileCurrentUsageMb"
