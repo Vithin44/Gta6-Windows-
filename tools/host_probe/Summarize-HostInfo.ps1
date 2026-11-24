@@ -57,7 +57,7 @@ if ($null -ne $commitLimit -and $null -ne $committed) {
 }
 
 Write-Host ""
-Write-Host "GTA VI Windows Research — PC inventory"
+Write-Host "GTA VI Windows Research - PC inventory"
 $collectedAt = $report.collectedAtUtc
 $osCaption = $report.operatingSystem.caption
 $osBuild = $report.operatingSystem.buildNumber
@@ -146,7 +146,7 @@ if ($null -eq $nativeGpu) {
 }
 
 if ($null -ne $commitLimit -and [double]$commitLimit -lt 36GB) {
-    $warnings.Add("Commit limit is below the roughly 36–40 GiB peak reported in an XCL world-loading issue; this is a comparison point, not a guaranteed minimum.")
+    $warnings.Add("Commit limit is below the roughly 36-40 GiB peak reported in an XCL world-loading issue; this is a comparison point, not a guaranteed minimum.")
 }
 
 $maxFree = 0.0
