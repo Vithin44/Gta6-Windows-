@@ -1,0 +1,142 @@
+# Read-only Windows host inventory for GTA VI compatibility research.
+# This script does not scan for game files, install software, change settings, or launch a game.
+[CmdletBinding()]
+param(
+    [string]$OutputPath = (Join-Path $PSScriptRoot "..\..\reports\host-probe.json"),
+    [switch]$IncludeVulkanInfo
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+function Get-SafeProperty {
+    param(
+        [object]$InputObject,
+        [string]$Name
+    )
+    if ($null -eq $InputObject) { return $null }
+    $property = $InputObject.PSObject.Properties[$Name]
+    if ($null -eq $property) { return $null }
+    return $property.Value
+}
+
+$os = Get-CimInstance -ClassName Win32_OperatingSystem
+$computer = Get-CimInstance -ClassName Win32_ComputerSystem
+$processors = @(Get-CimInstance -ClassName Win32_Processor)
+$videoControllers = @(Get-CimInstance -ClassName Win32_VideoController)
+$logicalDisks = @(Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DriveType=3")
+
+$cpuFeatures = [ordered]@{
+    avx2 = $null
+    note = "Null means this PowerShell/.NET runtime could not query AVX2; it does not mean AVX2 is absent."
+}
+try {
+    $avx2Type = [System.Type]::GetType("System.Runtime.Intrinsics.X86.Avx2, System.Private.CoreLib", $false)
+    if ($null -ne $avx2Type) {
+        $isSupported = $avx2Type.GetProperty("IsSupported")
+        if ($null -ne $isSupported) {
+            $cpuFeatures.avx2 = [bool]$isSupported.GetValue($null)
+        }
+    }
+} catch {
+    $cpuFeatures.note = "AVX2 query unavailable in this PowerShell/.NET runtime: $($_.Exception.Message)"
+}
+
+$gpus = foreach ($gpu in $videoControllers) {
+    [ordered]@{
+        name = Get-SafeProperty $gpu "Name"
+        videoProcessor = Get-SafeProperty $gpu "VideoProcessor"
+        driverVersion = Get-SafeProperty $gpu "DriverVersion"
+        driverDate = Get-SafeProperty $gpu "DriverDate"
+        adapterRamReportedBytes = Get-SafeProperty $gpu "AdapterRAM"
+        note = "Win32_VideoController AdapterRAM can be capped or inaccurate; verify dedicated VRAM with a GPU-specific tool."
+    }
+}
+
+$disks = foreach ($disk in $logicalDisks) {
+    [ordered]@{
+        device = Get-SafeProperty $disk "DeviceID"
+        volumeName = Get-SafeProperty $disk "VolumeName"
+        sizeBytes = Get-SafeProperty $disk "Size"
+        freeBytes = Get-SafeProperty $disk "FreeSpace"
+    }
+}
+
+$vulkan = [ordered]@{
+    queried = $false
+    commandFound = $false
+    summary = $null
+    error = $null
+}
+if ($IncludeVulkanInfo) {
+    $vulkanCommand = Get-Command "vulkaninfo" -ErrorAction SilentlyContinue
+    if ($null -ne $vulkanCommand) {
+        $vulkan.commandFound = $true
+        try {
+            $vulkanOutput = & $vulkanCommand.Source --summary 2>&1 | Out-String
+            $vulkan.summary = $vulkanOutput.Trim()
+            $vulkan.queried = $true
+        } catch {
+            $vulkan.error = $_.Exception.Message
+        }
+    } else {
+        $vulkan.error = "vulkaninfo was not found on PATH; no software was installed."
+    }
+}
+
+$report = [ordered]@{
+    reportVersion = 1
+    collectedAtUtc = (Get-Date).ToUniversalTime().ToString("o")
+    machineName = $env:COMPUTERNAME
+    operatingSystem = [ordered]@{
+        caption = Get-SafeProperty $os "Caption"
+        version = Get-SafeProperty $os "Version"
+        buildNumber = Get-SafeProperty $os "BuildNumber"
+        architecture = Get-SafeProperty $os "OSArchitecture"
+    }
+    memory = [ordered]@{
+        totalPhysicalBytes = Get-SafeProperty $computer "TotalPhysicalMemory"
+        freePhysicalMemoryKb = Get-SafeProperty $os "FreePhysicalMemory"
+        totalVisibleMemorySizeKb = Get-SafeProperty $os "TotalVisibleMemorySize"
+    }
+    processors = @(
+        foreach ($cpu in $processors) {
+            [ordered]@{
+                name = Get-SafeProperty $cpu "Name"
+                manufacturer = Get-SafeProperty $cpu "Manufacturer"
+                cores = Get-SafeProperty $cpu "NumberOfCores"
+                logicalProcessors = Get-SafeProperty $cpu "NumberOfLogicalProcessors"
+                addressWidth = Get-SafeProperty $cpu "AddressWidth"
+            }
+        }
+    )
+    cpuFeatures = $cpuFeatures
+    graphics = [ordered]@{
+        adapters = @($gpus)
+        d3d12FeatureLevel = "not queried by this probe"
+        shaderModel = "not queried by this probe"
+        meshShaderTier = "not queried by this probe"
+        vulkan = $vulkan
+    }
+    fixedDisks = @($disks)
+    safety = [ordered]@{
+        gameFilesScanned = $false
+        gameProcessesLaunched = $false
+        settingsChanged = $false
+        softwareInstalled = $false
+        networkUsed = $false
+    }
+}
+
+$resolvedOutputPath = [System.IO.Path]::GetFullPath($OutputPath)
+$outputDirectory = Split-Path -Parent $resolvedOutputPath
+if (-not (Test-Path -LiteralPath $outputDirectory)) {
+    New-Item -ItemType Directory -Path $outputDirectory -Force | Out-Null
+}
+
+$json = $report | ConvertTo-Json -Depth 10
+[System.IO.File]::WriteAllText($resolvedOutputPath, $json, (New-Object System.Text.UTF8Encoding($false)))
+
+Write-Host "Host inventory saved to: $resolvedOutputPath"
+Write-Host "This probe did not scan game files, launch a game, install software, or change system settings."
+Write-Host "D3D12 shader-model and mesh-shader feature checks are intentionally marked as not queried."
