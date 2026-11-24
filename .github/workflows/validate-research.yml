@@ -75,7 +75,12 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
       - name: Build native capability probe
         shell: pwsh
-        run: cl /nologo /std:c++17 /EHsc /W4 tools\host_probe\host_caps.cpp /link d3d12.lib dxgi.lib /OUT:tools\host_probe\host_caps.exe
+        run: |
+          cl /MT /nologo /std:c++17 /EHsc /W4 tools\host_probe\host_caps.cpp /link d3d12.lib dxgi.lib /OUT:tools\host_probe\host_caps.exe
+          $dependencies = dumpbin /dependents tools\host_probe\host_caps.exe | Out-String
+          if ($dependencies -match "VCRUNTIME|MSVCP") {
+            throw "Probe unexpectedly depends on a dynamic MSVC runtime."
+          }
       - name: Upload native probe executable
         uses: actions/upload-artifact@v4
         with:
