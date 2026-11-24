@@ -103,6 +103,8 @@ def host_record(host_path: Path | None) -> dict[str, Any]:
             feature_checks[key] = value
 
     total_ram = memory.get("totalPhysicalBytes")
+    committed_bytes = memory.get("committedBytes")
+    commit_limit_bytes = memory.get("commitLimitBytes")
     vram_bytes = native_gpu.get("dedicated_video_memory_bytes")
     if not isinstance(vram_bytes, (int, float)):
         vram_bytes = wmi_gpu.get("adapterRamReportedBytes")
@@ -121,7 +123,13 @@ def host_record(host_path: Path | None) -> dict[str, Any]:
         "cpu": cpu_info.get("name") or native_cpu.get("brand"),
         "cpu_features": sorted(set(cpu_features)),
         "ram_total_mb": int(total_ram // (1024 * 1024)) if isinstance(total_ram, (int, float)) else None,
-        "commit_limit_mb": None,
+        "committed_mb": int(committed_bytes // (1024 * 1024)) if isinstance(committed_bytes, (int, float)) else None,
+        "commit_limit_mb": int(commit_limit_bytes // (1024 * 1024)) if isinstance(commit_limit_bytes, (int, float)) else None,
+        "commit_remaining_mb": (
+            int(max(0, commit_limit_bytes - committed_bytes) // (1024 * 1024))
+            if isinstance(commit_limit_bytes, (int, float)) and isinstance(committed_bytes, (int, float))
+            else None
+        ),
         "gpu": native_gpu.get("name") or wmi_gpu.get("name"),
         "gpu_driver": str(driver) if driver is not None else None,
         "gpu_vram_mb": int(vram_bytes // (1024 * 1024)) if isinstance(vram_bytes, (int, float)) else None,
