@@ -95,7 +95,7 @@ Write-Host "RAM:       $ramTotal"
 Write-Host "RAM free:  $ramFree ($ramAvailableText)"
 Write-Host "Committed: $committedText"
 Write-Host "Commit left: $commitLeftText"
-Write-Host "Pagefile:  $pageFileAllocated MB allocated; $pageFileCurrentUsage MB in use"
+Write-Host ('Pagefile:  ' + $pageFileAllocated + ' MB allocated; ' + $pageFileCurrentUsage + ' MB in use')
 Write-Host "GPU:       $gpuName"
 Write-Host "GPU arch:  $gpuArch"
 Write-Host "Driver:    $gpuDriver"
