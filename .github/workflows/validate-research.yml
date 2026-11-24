@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.12"
       - name: Install report validator
@@ -38,7 +38,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
       - name: Parse PowerShell without running it
         shell: pwsh
         run: |
@@ -70,9 +70,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
       - name: Set up MSVC environment
-        uses: ilammy/msvc-dev-cmd@v1
+        uses: ilammy/msvc-dev-cmd@v1.13.0
       - name: Build native capability probe
         shell: pwsh
         run: |
@@ -82,7 +82,7 @@ jobs:
             throw "Probe unexpectedly depends on a dynamic MSVC runtime."
           }
       - name: Upload native probe executable
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: windows-host-probe
           path: tools/host_probe/host_caps.exe
