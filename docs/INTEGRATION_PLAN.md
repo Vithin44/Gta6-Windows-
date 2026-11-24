@@ -35,7 +35,7 @@
 
 **Status: Windows artifact build configured; target-PC execution pending**
 
-The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags, RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. GitHub Actions now builds and publishes a ready-to-run Windows executable artifact. Windows CI successfully built and published the `windows-host-probe` artifact (run #17, expires 2026-12-08). The probe has not yet been run on the target PC.
+The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags, RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. GitHub Actions now builds and publishes a ready-to-run Windows executable artifact. Windows CI has successfully built and published the `windows-host-probe` artifact before; the latest revision now also includes committed-memory/pagefile metrics and a more precise AVX-state label. Use the newest successful workflow artifact, not an older run. The probe has not yet been run on the target PC.
 
 Create a read-only Windows host probe. First target the user's reported hardware:
 
