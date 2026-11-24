@@ -44,17 +44,26 @@ jobs:
         run: |
           $tokens = $null
           $parseErrors = $null
-          $path = (Resolve-Path "tools/host_probe/Collect-HostInfo.ps1").Path
-          [System.Management.Automation.Language.Parser]::ParseFile(
-            $path,
-            [ref]$tokens,
-            [ref]$parseErrors
-          ) | Out-Null
-          if ($parseErrors.Count -gt 0) {
-            $parseErrors | Format-List
-            exit 1
+          $paths = @(
+            "tools/host_probe/Collect-HostInfo.ps1",
+            "tools/host_probe/Summarize-HostInfo.ps1"
+          )
+          foreach ($relativePath in $paths) {
+            $tokens = $null
+            $parseErrors = $null
+            $path = (Resolve-Path $relativePath).Path
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              $path,
+              [ref]$tokens,
+              [ref]$parseErrors
+            ) | Out-Null
+            if ($parseErrors.Count -gt 0) {
+              Write-Error "PowerShell syntax errors in $relativePath"
+              $parseErrors | Format-List
+              exit 1
+            }
           }
-          Write-Host "PowerShell syntax is valid."
+          Write-Host "Both PowerShell host-probe scripts parsed successfully."
 
   native-probe-compile:
     name: Compile CPU and D3D12 probe
