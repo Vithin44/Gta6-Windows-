@@ -26,6 +26,8 @@ jobs:
         run: python -m json.tool manifests/upstreams.json > /dev/null
       - name: Validate report schema and synthetic fixture
         run: python tools/report/validate_report.py examples/reports/synthetic-pass.json
+      - name: Test upstream report normalizers
+        run: python -m unittest discover -s tools/report -p "test_*.py" -v
 
   powershell-syntax:
     name: Parse Windows host probe
