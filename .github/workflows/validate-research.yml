@@ -9,6 +9,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: validate-research-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   report-schema:
     name: Validate JSON reports and manifests
