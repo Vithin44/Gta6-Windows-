@@ -55,6 +55,7 @@ See [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) for milestone exit crit
 - [docs/FEATURE_MATRIX.md](docs/FEATURE_MATRIX.md) — source-level comparison of the three upstreams.
 - [docs/HOST_PROBE.md](docs/HOST_PROBE.md) — how to collect a read-only Windows hardware inventory.
 - [docs/REPORTS.md](docs/REPORTS.md) — how to normalize and validate upstream diagnostic logs.
+- [upstream smoke workflow](.github/workflows/upstream-smoke.yml) — isolated, pinned XCL and VIctory tests without title data.
 - [CONTRIBUTING.md](CONTRIBUTING.md) — security, provenance and contribution rules.
 - [manifests/upstreams.json](manifests/upstreams.json) — machine-readable upstream records.
 - [schemas/run-report.schema.json](schemas/run-report.schema.json) — normalized test-report schema.
