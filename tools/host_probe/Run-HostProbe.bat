@@ -15,7 +15,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ".\tools\host_probe\Collect-
 if errorlevel 1 (
     echo.
     echo Host inventory failed. No settings were changed.
-    pause
+    if not defined CI pause
     popd
     exit /b 1
 )
@@ -25,7 +25,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ".\tools\host_probe\Summariz
 if errorlevel 1 (
     echo.
     echo Summary failed. The JSON report may still be available in reports\host-probe.json.
-    pause
+    if not defined CI pause
     popd
     exit /b 1
 )
@@ -33,5 +33,5 @@ if errorlevel 1 (
 echo.
 echo Report saved to reports\host-probe.json
 echo Review the JSON before sharing it; it contains your PC name and hardware details.
-pause
+if not defined CI pause
 popd

@@ -116,6 +116,23 @@ jobs:
           path: ${{ runner.temp }}/host-probe-bundle
           if-no-files-found: error
           retention-days: 14
+      - name: Smoke test one-click host-probe bundle
+        shell: pwsh
+        run: |
+          $bundle = Join-Path $env:RUNNER_TEMP "host-probe-bundle"
+          Push-Location $bundle
+          try {
+            cmd /c .\Run-HostProbe.bat
+            if ($LASTEXITCODE -ne 0) {
+              throw "Run-HostProbe.bat failed with exit code $LASTEXITCODE."
+            }
+            if (-not (Test-Path ".\reports\host-probe.json")) {
+              throw "One-click runner did not create reports\host-probe.json."
+            }
+            Write-Host "One-click host-probe bundle completed successfully."
+          } finally {
+            Pop-Location
+          }
       - name: Execute native probe on the CI host
         shell: pwsh
         run: |
