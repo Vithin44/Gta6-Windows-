@@ -23,7 +23,7 @@
       "repository": "https://github.com/Marvisak/VIctory",
       "branch": "main",
       "commit": "d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989",
-      "license": "GPL-3.0",
+      "license": "GPL-3.0-or-later",
       "license_evidence": "LICENSE is GNU GPL version 3; Cargo.toml declares GPL-3.0-or-later. Latest main checked 2026-11-24 at d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989.",
       "graphics_path": "Xbox D3D12.X to host D3D12; RDNA2 shaders to DXIL",
       "role": "gta_vi_boot_and_d3d12_candidate",
