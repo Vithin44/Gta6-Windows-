@@ -98,6 +98,26 @@ class NormalizeUpstreamTests(unittest.TestCase):
             self.assertNotIn("0x12345678", json.dumps(report))
             self.assert_valid_schema(report)
 
+    def test_victory_can_ignore_old_appended_crash_records(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / "crashes.log"
+            console = Path(directory) / "console.txt"
+            source.write_text(
+                "unix time 1795521600, process 1234\\n"
+                "VIctory: unhandled exception 0xc0000005 at 0x12345678\\n",
+                encoding="utf-8",
+            )
+            console.write_text("mapped at 0x100000\\n", encoding="utf-8")
+            args = common_args(source, "victory")
+            args.console_log = console
+            args.run_start_utc = "2026-11-24T13:00:00Z"
+            report = normalize_victory(args)
+
+            self.assertEqual("unknown", report["result"]["status"])
+            self.assertEqual("loader_initialized", report["result"]["stage_reached"])
+            self.assertIsNone(report["result"]["crash_code"])
+            self.assert_valid_schema(report)
+
     def test_victory_without_evidence_does_not_claim_a_boot(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             source = Path(directory) / "crashes.log"
