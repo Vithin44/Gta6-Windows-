@@ -1,7 +1,7 @@
 # Integration and execution plan
 
 **Baseline date:** 2026-11-24  
-**Current phase:** upstream audit and architecture definition  
+**Current phase:** upstream audit, report tooling and host diagnostics  
 **Rule:** each milestone has an observable exit condition. Do not report a milestone as complete without evidence.
 
 ## Milestone 0 — Establish project rules
@@ -24,7 +24,7 @@
 - [ ] Pin Leonida to a full 40-character commit SHA and capture its full LICENSE, third-party notices and submodule revisions.
 - [x] Pin XCL and VIctory to full commit SHAs and inspect key loader, runtime, D3D12 and shader source files at those revisions.
 - [ ] Record top-level and dependency licenses, including submodules and generated/test data.
-- [ ] Compare loader, TLS, import resolution, filesystem, runtime services, D3D12.X, shader translation, audio and input implementations.
+- [x] Compare the documented loader, TLS, import resolution, filesystem, runtime services, D3D12.X, shader translation, audio and input paths for XCL and VIctory.\n- [ ] Complete the same file-level comparison for Leonida after its source revision is reachable.
 - [ ] Separate synthetic tests, tests using public samples, and tests requiring user-owned title data.
 - [ ] Inspect CI workflows and recent failures; distinguish passing tests from skipped tests.
 
@@ -32,9 +32,9 @@
 
 ## Milestone 2 — Host capability inventory
 
-**Status: probe implemented; target-PC execution pending**
+**Status: Windows artifact build configured; target-PC execution pending**
 
-The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags (including AVX2, CLWB, CLZERO, MONITORX/MWAITX and SSE4A), RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. The native probe compiled successfully in Windows CI; the PowerShell parser and report-schema validation also passed. It has not yet been run on the target PC.
+The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags, RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. GitHub Actions now builds and publishes a ready-to-run Windows executable artifact. Earlier compile/parser checks passed; the new artifact workflow is being validated. The probe has not yet been run on the target PC.
 
 Create a read-only Windows host probe. First target the user's reported hardware:
 
@@ -61,12 +61,12 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 
 ## Milestone 4 — Shared report and diagnostics tooling
 
-**Status: initial schema and validator implemented; upstream adapters pending**
+**Status: schema, validator, XCL and VIctory adapters implemented; CI tests pending**
 
 - [x] Implement a versioned JSON run-report schema.
 - [x] Add a validator for project-owned reports and a synthetic fixture.
 - [x] Validate the manifest, report fixture and PowerShell syntax in GitHub Actions; compile the native C++ probe in Windows CI.
-- [ ] Add a normalizer for reports voluntarily exported by the upstream tools.
+- [x] Add conservative normalizers for XCL report.json and VIctory crash/console logs.\n- [ ] Add a Leonida adapter after its test artifact formats and exact revision are verified.
 - [ ] Preserve original logs; normalized reports link to local copies instead of replacing them.
 - [ ] Record the exact commit, host, driver, test and stage for every run.
 - [ ] Add redaction for usernames and absolute paths before sharing reports.
@@ -141,7 +141,7 @@ Otherwise, keep this repository as an orchestration, comparison and diagnostics 
 | GPL-2.0-only vs GPL-3.x | Cannot assume one combined derivative is distributable | Keep runtimes separate; review before code reuse |
 | Leonida exact revision unavailable through current connector | Cannot claim a pinned source audit | Capture SHA and license through a verified Git source before pinning |
 | README status may lag current upstream issue/PR activity | Maturity comparisons can be wrong | Use commit-specific tests, CI and recent issue evidence |
-| RX 6600 feature support not measured | A backend may fail before game-specific code runs | Host capability probe first |
+| RX 6600 feature support not measured | A backend may fail before game-specific code runs | Host capability probe first |\n| 16 GB RAM vs upstream-reported 36–40 GB commit growth | XCL world-loading tests may exhaust commit or stall | Measure commit limit/free memory; do not start title runs until synthetic builds and memory requirements are understood |\n| Leonida full asset stage requires about 400 GiB free | A full asset build could consume most of the 1 TB SSD | Prefer the documented reduced check/shader/runtime stages first; measure free disk space |
 | 16 GB RAM and unknown free disk space | Build/runtime may exhaust commit or storage | Measure first; avoid full asset build by default |
 | Driver hang/reset risk | System instability or lost work | Synthetic tests, diagnostic fallback, stop on reset |
 | User data could be accidentally committed | Copyright/privacy/security risk | Keep all game data outside repo; ignore output folders |
