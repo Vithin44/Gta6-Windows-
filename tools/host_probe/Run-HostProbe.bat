@@ -1,6 +1,11 @@
 @echo off
 setlocal
-pushd "%~dp0\..\.."
+set "ROOT=%~dp0"
+if exist "%ROOT%tools\host_probe\Collect-HostInfo.ps1" (
+    pushd "%ROOT%"
+) else (
+    pushd "%ROOT%..\.."
+)
 
 echo GTA VI Windows Research - read-only host probe
 echo This reads hardware and Windows capabilities only. It does not launch a game.
