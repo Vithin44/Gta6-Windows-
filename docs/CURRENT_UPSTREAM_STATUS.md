@@ -58,7 +58,7 @@ Completed [smoke run #7](https://github.com/Vithin44/Gta6-Windows-/actions/runs/
 
 VIctory's earlier parallel run crashed in `victory-shader` with Windows `0xc0000005`. The single-threaded pass suggests a possible concurrency-sensitive issue, but does not prove the cause or resolve the parallel-run failure.
 
-The current XCL main revision and semantic shader-cache tests passed in run #7. The host probe passed CI validation in [run #105](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333503675); the [standalone bundle](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333503675/artifacts/14892907119) includes a one-click launcher tested on Windows PowerShell 5.1. It has not yet been run on the target PC.
+The current XCL main revision and semantic shader-cache tests passed in run #7. The host probe passed CI validation in [run #106](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333697758); the [standalone bundle](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333697758/artifacts/14892459149) includes a one-click launcher tested on Windows PowerShell 5.1. CI also initialized and verified both pinned Git submodules against the manifest. The probe has not yet been run on the target PC.
 
 ## Integration decision
 

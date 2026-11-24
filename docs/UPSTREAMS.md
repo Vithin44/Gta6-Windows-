@@ -78,7 +78,7 @@ AMD documents the RX 6600 as RDNA2 `gfx1032`, while DedSec's README emphasizes `
 
 ## Our isolated smoke-test result
 
-Workflow [run #7](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45332131897) completed successfully on Windows Server 2025. XCL and VIctory were built/tested at separate immutable revisions; no title data was used and no upstream source was copied into this repository. XCL reported 703/0/41 and VIctory 264/0/4. XCL GPU tests were skipped on the hosted runner for missing Wave64/GPU UMA. XCL and VIctory are also pinned as separate Git submodules; CI submodule checkout verification is being added. These results do not prove either runtime works on the user's PC or that GTA VI is playable.
+Workflow [run #7](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45332131897) completed successfully on Windows Server 2025. XCL and VIctory were built/tested at separate immutable revisions; no title data was used and no upstream source was copied into this repository. XCL reported 703/0/41 and VIctory 264/0/4. XCL GPU tests were skipped on the hosted runner for missing Wave64/GPU UMA. XCL and VIctory are also pinned as separate Git submodules. The validation workflow initialized both public submodules and verified their checked-out commits and origin URLs against the manifest in [run #106](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333697758). These results do not prove either runtime works on the user's PC or that GTA VI is playable.
 
 ## License and integration constraints
 

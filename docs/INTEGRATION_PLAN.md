@@ -37,7 +37,7 @@
 
 **Status: Windows artifact build configured; target-PC execution pending**
 
-The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags, RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps lane range, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. GitHub Actions built and executed the probe successfully in [validation run #105](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333503675); download the [standalone host-probe bundle](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333503675/artifacts/14892907119). The bundle expires 2026-12-08 and its one-click runner passed CI on Windows PowerShell 5.1. The probe has not yet been run on the target PC.
+The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags, RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps lane range, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. GitHub Actions built and executed the probe successfully in [validation run #105](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333697758); download the [standalone host-probe bundle](https://github.com/Vithin44/Gta6-Windows-/actions/runs/45333697758/artifacts/14892459149). The bundle expires 2026-12-08 and its one-click runner passed CI on Windows PowerShell 5.1. The probe has not yet been run on the target PC.
 
 Create a read-only Windows host probe. First target the user's reported hardware:
 
