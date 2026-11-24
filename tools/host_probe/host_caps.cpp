@@ -48,8 +48,9 @@ static std::string utf8(const wchar_t* value) {
     if (!value || !*value) return {};
     const int needed = WideCharToMultiByte(CP_UTF8, 0, value, -1, nullptr, 0, nullptr, nullptr);
     if (needed <= 1) return {};
-    std::string out(static_cast<size_t>(needed - 1), '\0');
+    std::string out(static_cast<size_t>(needed), '\0');
     WideCharToMultiByte(CP_UTF8, 0, value, -1, out.data(), needed, nullptr, nullptr);
+    out.pop_back();
     return out;
 }
 
