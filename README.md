@@ -30,7 +30,7 @@ The projects remain separate. Their code is not being blindly copied or combined
 
 ## Project status
 
-<badge>Research and architecture stage</badge>
+**Status:** research and architecture stage
 
 The repository now contains an upstream audit, an integration architecture, a staged execution plan, contribution rules, an upstream manifest and a normalized run-report schema.
 
