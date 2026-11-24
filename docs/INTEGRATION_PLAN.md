@@ -34,7 +34,7 @@
 
 **Status: probe implemented; target-PC execution pending**
 
-The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags (including AVX2, CLWB, CLZERO, MONITORX/MWAITX and SSE4A), RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. The native probe is queued for Windows CI compilation; it has not yet been run on the target PC.
+The read-only PowerShell inventory and native C++ CPUID/D3D12 probe are committed. They record OS, CPU instruction flags (including AVX2, CLWB, CLZERO, MONITORX/MWAITX and SSE4A), RAM, GPU adapter/VRAM, D3D12 shader model, WaveOps, mesh-shader tier and disk capacity. Optional Vulkan summary capture is available. The native probe compiled successfully in Windows CI; the PowerShell parser and report-schema validation also passed. It has not yet been run on the target PC.
 
 Create a read-only Windows host probe. First target the user's reported hardware:
 
@@ -65,6 +65,7 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 
 - [x] Implement a versioned JSON run-report schema.
 - [x] Add a validator for project-owned reports and a synthetic fixture.
+- [x] Validate the manifest, report fixture and PowerShell syntax in GitHub Actions; compile the native C++ probe in Windows CI.
 - [ ] Add a normalizer for reports voluntarily exported by the upstream tools.
 - [ ] Preserve original logs; normalized reports link to local copies instead of replacing them.
 - [ ] Record the exact commit, host, driver, test and stage for every run.
