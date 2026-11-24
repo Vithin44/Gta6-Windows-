@@ -27,42 +27,69 @@
     },
     "upstream": {
       "type": "object",
-      "required": ["id", "repository", "commit"],
+      "required": [
+        "id",
+        "repository",
+        "commit"
+      ],
       "properties": {
         "id": {
-          "enum": ["xcl", "victory", "leonida", "local_tool"]
+          "enum": [
+            "xcl",
+            "victory",
+            "leonida",
+            "local_tool"
+          ]
         },
         "repository": {
           "type": "string"
         },
         "commit": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "pattern": "^[0-9a-f]{40}$"
         },
         "working_tree_clean": {
-          "type": ["boolean", "null"]
+          "type": [
+            "boolean",
+            "null"
+          ]
         },
         "build_configuration": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "additionalProperties": false
     },
     "host": {
       "type": "object",
-      "required": ["os", "architecture"],
+      "required": [
+        "os",
+        "architecture"
+      ],
       "properties": {
         "os": {
           "type": "string"
         },
         "os_build": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "architecture": {
           "type": "string"
         },
         "cpu": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "cpu_features": {
           "type": "array",
@@ -71,44 +98,92 @@
           }
         },
         "ram_total_mb": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 0
         },
         "commit_limit_mb": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 0
         },
         "gpu": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "gpu_driver": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "gpu_vram_mb": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 0
         },
         "graphics_api": {
-          "enum": ["d3d12", "vulkan", "none", "unknown"]
+          "enum": [
+            "d3d12",
+            "vulkan",
+            "none",
+            "unknown"
+          ]
         },
         "feature_checks": {
           "type": "object",
           "additionalProperties": {
-            "type": ["boolean", "string", "number", "null"]
+            "type": [
+              "boolean",
+              "string",
+              "number",
+              "null"
+            ]
           }
+        },
+        "committed_mb": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "commit_remaining_mb": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
         }
       },
       "additionalProperties": false
     },
     "test": {
       "type": "object",
-      "required": ["name", "input_class", "command"],
+      "required": [
+        "name",
+        "input_class",
+        "command"
+      ],
       "properties": {
         "name": {
           "type": "string"
         },
         "input_class": {
-          "enum": ["synthetic_fixture", "public_sample", "user_owned_local_data", "host_probe"]
+          "enum": [
+            "synthetic_fixture",
+            "public_sample",
+            "user_owned_local_data",
+            "host_probe"
+          ]
         },
         "command": {
           "type": "string"
@@ -120,7 +195,10 @@
           }
         },
         "duration_ms": {
-          "type": ["integer", "null"],
+          "type": [
+            "integer",
+            "null"
+          ],
           "minimum": 0
         }
       },
@@ -128,13 +206,26 @@
     },
     "result": {
       "type": "object",
-      "required": ["status", "exit_code", "stage_reached"],
+      "required": [
+        "status",
+        "exit_code",
+        "stage_reached"
+      ],
       "properties": {
         "status": {
-          "enum": ["passed", "failed", "skipped", "blocked", "unknown"]
+          "enum": [
+            "passed",
+            "failed",
+            "skipped",
+            "blocked",
+            "unknown"
+          ]
         },
         "exit_code": {
-          "type": ["integer", "null"]
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "stage_reached": {
           "enum": [
@@ -164,10 +255,16 @@
           }
         },
         "crash_code": {
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "log_reference": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "A local relative path chosen by the user. Do not embed log contents or secrets."
         }
       },
