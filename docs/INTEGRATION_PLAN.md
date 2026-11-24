@@ -19,7 +19,7 @@
 
 ## Milestone 1 — Pin and deepen upstream audits
 
-**Status: in progress**
+**Status: in progress — XCL and VIctory pinned; Leonida source pin blocked**
 
 - [ ] Pin Leonida to a full 40-character commit SHA and capture its full LICENSE, third-party notices and submodule revisions.
 - [x] Pin XCL and VIctory to full commit SHAs and inspect key loader, runtime, D3D12 and shader source files at those revisions.
@@ -50,19 +50,21 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 
 ## Milestone 3 — Independent source checkout and clean builds
 
-**Status: blocked on Milestone 1**
+**Status: first pinned smoke workflow configured; CI results pending**
 
-- [ ] Add pinned upstream references only after revision and license capture.
-- [ ] Keep each upstream in its own checkout and build directory.
-- [ ] Build only the upstream's documented tools and synthetic test fixtures.
-- [ ] Capture compiler versions, commands, build output and exit codes.
+- [x] Add pinned XCL and VIctory source references to an isolated GitHub Actions workflow.
+- [x] Keep each upstream in its own ephemeral checkout and build directory; no upstream source is committed here.
+- [x] Restrict XCL tests to the upstream-supported no-title-data suite and skip its retail title end-to-end test.
+- [x] Use VIctory's documented `cargo test --workspace --locked` suite, which requires no title data.
+- [ ] Capture successful build/test logs and confirm skipped GPU tests are clearly reported.
+- [ ] Add Leonida only after its exact revision and full dependency/license provenance can be verified.
 - [ ] Do not build or run leaked executables or unknown prebuilt binaries.
 
-**Exit evidence:** reproducible build records for each independently buildable upstream. A build failure is recorded as-is, not hidden.
+**Exit evidence:** reproducible build records for each independently buildable upstream. A build failure is recorded as-is, not hidden. The first CI run is [Independent upstream smoke tests](https://github.com/Vithin44/Gta6-Windows-/actions/workflows/upstream-smoke.yml).
 
 ## Milestone 4 — Shared report and diagnostics tooling
 
-**Status: schema, validator, XCL and VIctory adapters implemented; CI tests passing**
+**Status: schema, validator and XCL/VIctory adapters implemented; latest regression run pending**
 
 - [x] Implement a versioned JSON run-report schema.
 - [x] Add a validator for project-owned reports and a synthetic fixture.
