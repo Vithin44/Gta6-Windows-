@@ -12,7 +12,7 @@ import json
 import re
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Any
 
 
@@ -133,8 +133,15 @@ def host_record(host_path: Path | None) -> dict[str, Any]:
 
 def safe_log_reference(value: str | None, fallback: Path) -> str:
     candidate = Path(value) if value else Path(fallback.name)
-    if candidate.is_absolute() or ".." in candidate.parts:
-        raise ValueError("log reference must be a relative path without '..'")
+    windows_candidate = PureWindowsPath(value) if value else PureWindowsPath(fallback.name)
+    if (
+        candidate.is_absolute()
+        or windows_candidate.is_absolute()
+        or ".." in candidate.parts
+        or ".." in windows_candidate.parts
+        or (windows_candidate.drive and not windows_candidate.root)
+    ):
+        raise ValueError("log reference must be a relative path without '..' or a drive prefix")
     return candidate.as_posix()
 
 
@@ -163,9 +170,13 @@ def base_report(
         raise ValueError(f"--input-class must be one of: {', '.join(INPUT_CLASSES)}")
     when = timestamp or utc_now()
     try:
-        datetime.fromisoformat(when.replace("Z", "+00:00"))
+        parsed_time = datetime.fromisoformat(when.replace("Z", "+00:00"))
+        if parsed_time.tzinfo is None:
+            raise ValueError("timestamp has no timezone")
+        if "T" not in when:
+            raise ValueError("timestamp has no time component")
     except ValueError as exc:
-        raise ValueError("--timestamp must be an ISO 8601 date-time") from exc
+        raise ValueError("--timestamp must be a timezone-aware ISO 8601 date-time") from exc
     generated_id = run_id or f"{upstream}-{source_path.stem}-{when.replace(':', '').replace('-', '')}"
     return {
         "schema_version": 1,
