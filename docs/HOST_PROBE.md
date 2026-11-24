@@ -36,11 +36,11 @@ The summary is a screening aid, not a compatibility verdict. You can choose anot
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\host_probe\Collect-HostInfo.ps1 -IncludeD3D12Info -OutputPath "$env:USERPROFILE\Desktop\host-probe.json"
 ```
 
-The native program reads CPUID and asks DXGI/D3D12 for hardware-adapter capabilities. It records:
+The native program reads CPUID and asks DXGI/D3D12 for hardware-adapter capabilities. It records the exact PCI vendor/device IDs and a deliberately small AMD target hint table. For example, AMD's RX 6600 (Navi 23) is identified as `gfx1032`, not `gfx1030`; unknown IDs are never guessed. The target hint is a cross-check, not proof that a shader translator supports that GPU. It records:
 
 - AVX/AVX2 hardware support and whether Windows has enabled the required AVX state;
 - SSE4A, CLWB, CLZERO, MONITORX/MWAITX, CLFLUSHOPT, FMA3, BMI1 and BMI2;
-- GPU adapter name, vendor/device IDs and dedicated VRAM reported by DXGI;
+- GPU adapter name, vendor/device IDs and dedicated VRAM reported by DXGI;\n- a conservative AMD RDNA2 target hint for a small set of known PCI IDs (unknown IDs remain unknown; this is not a full PCI database);
 - D3D12 availability and feature level;
 - highest queried shader model, WaveOps/lane range and mesh-shader tier.
 

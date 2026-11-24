@@ -98,6 +98,7 @@ class NormalizeUpstreamTests(unittest.TestCase):
             self.assertEqual(24576, report["host"]["commit_remaining_mb"])
             self.assertEqual("AMD Radeon RX 6600", report["host"]["gpu"])
             self.assertEqual(8192, report["host"]["gpu_vram_mb"])
+            self.assertEqual("gfx1032", report["host"]["feature_checks"]["amd_gfx_target"])
             self.assertEqual("6_7", report["host"]["feature_checks"]["shader_model"])
             self.assertIn("avx2_hardware", report["host"]["cpu_features"])
             self.assert_valid_schema(report)

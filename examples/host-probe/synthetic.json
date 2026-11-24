@@ -84,7 +84,7 @@
           {
             "name": "Synthetic AMD Radeon RX 6600",
             "vendor_id": 4098,
-            "device_id": 1234,
+            "device_id": 29695,
             "dedicated_video_memory_bytes": 8589934592,
             "d3d12_available": true,
             "feature_level": "12_1",
@@ -96,7 +96,8 @@
             "d3d12_create_hr": 0,
             "shader_model_hr": 0,
             "options1_hr": 0,
-            "options7_hr": 0
+            "options7_hr": 0,
+            "amd_gfx_target": "gfx1032"
           }
         ]
       },

@@ -151,8 +151,23 @@ static std::string shader_model_name(D3D_SHADER_MODEL model) {
     return std::to_string(major) + "_" + std::to_string(minor);
 }
 
+static const char* amd_gfx_target(unsigned int vendor_id, unsigned int device_id) {
+    if (vendor_id != 0x1002) return "not_amd_or_unknown";
+    // PCI IDs documented for representative RDNA2 desktop adapters.
+    // Unknown IDs deliberately remain unknown rather than guessing from a marketing name.
+    switch (device_id) {
+    case 0x73BF: return "gfx1030"; // Navi 21 family
+    case 0x73DF: return "gfx1031"; // Navi 22 family
+    case 0x73FF: // RX 6600 / RX 6600 XT / RX 6600M
+    case 0x73E2: // RX 6600 OEM
+    case 0x73EF: return "gfx1032"; // Navi 23 family
+    default: return "unknown";
+    }
+}
+
 struct AdapterResult {
     std::string name;
+    std::string amd_target = "unknown";
     unsigned int vendor_id = 0;
     unsigned int device_id = 0;
     unsigned long long dedicated_video_memory = 0;
@@ -177,6 +192,7 @@ static AdapterResult query_adapter(IDXGIAdapter1* adapter) {
     result.name = utf8(desc.Description);
     result.vendor_id = desc.VendorId;
     result.device_id = desc.DeviceId;
+    result.amd_target = amd_gfx_target(desc.VendorId, desc.DeviceId);
     result.dedicated_video_memory = static_cast<unsigned long long>(desc.DedicatedVideoMemory);
 
     ComPtr<ID3D12Device> device;
@@ -301,6 +317,7 @@ int main() {
             << "\"name\": \"" << json_escape(a.name) << "\","
             << "\"vendor_id\": " << a.vendor_id << ","
             << "\"device_id\": " << a.device_id << ","
+            << "\"amd_gfx_target\": \"" << a.amd_target << "\","
             << "\"dedicated_video_memory_bytes\": " << a.dedicated_video_memory << ","
             << "\"d3d12_available\": " << (a.d3d12_available ? "true" : "false") << ","
             << "\"feature_level\": \"" << a.feature_level << "\","

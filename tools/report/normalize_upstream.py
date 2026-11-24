@@ -92,6 +92,7 @@ def host_record(host_path: Path | None) -> dict[str, Any]:
     feature_checks: dict[str, Any] = {}
     for key in (
         "d3d12_available",
+        "amd_gfx_target",
         "shader_model",
         "wave_ops",
         "wave_lane_min",
