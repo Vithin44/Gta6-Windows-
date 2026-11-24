@@ -49,7 +49,7 @@ The Vulkan summary is retained as text. It is not yet a complete automated pass/
 
 ## Output and privacy
 
-The JSON report includes the machine name, Windows version, CPU model, RAM, GPU/driver details and disk capacity/free space. Review it before sharing; redact the machine name and any details you do not want public. The default output folder is ignored by Git.
+The JSON report includes the machine name, Windows version, CPU model, installed RAM, current committed memory, commit limit, page-file usage, GPU/driver details and disk capacity/free space. Review it before sharing; redact the machine name and any details you do not want public. The default output folder is ignored by Git.
 
 ## Limitations
 
