@@ -49,3 +49,15 @@ jobs:
             exit 1
           }
           Write-Host "PowerShell syntax is valid."
+
+  native-probe-compile:
+    name: Compile CPU and D3D12 probe
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+      - name: Compile native capability probe
+        shell: pwsh
+        run: cl /nologo /std:c++17 /EHsc /W4 /c tools\host_probe\host_caps.cpp /Fo:host_caps.obj
