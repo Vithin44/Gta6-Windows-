@@ -1,0 +1,49 @@
+{
+  "manifest_version": 1,
+  "audit_date": "2026-11-24",
+  "policy": "Keep each upstream as an independent project. Do not copy code until its exact revision, license, and third-party provenance have been reviewed.",
+  "upstreams": [
+    {
+      "id": "xcl",
+      "name": "XCL",
+      "repository": "https://github.com/ivall/xcl",
+      "branch": "main",
+      "commit": "64b3f35599bb7102f55d640e1a791e7d6dd3b175",
+      "license": "GPL-2.0-only",
+      "license_evidence": "LICENSE and Cargo.toml fetched from upstream main on 2026-11-24",
+      "graphics_path": "Xbox D3D12.X to host D3D12; RDNA2 shaders to HLSL/DXIL",
+      "role": "general_xbox_series_reference",
+      "checkout": null,
+      "source_import_allowed": false,
+      "notes": "Not a GTA VI-specific runtime. Its README reports other retail-title results."
+    },
+    {
+      "id": "victory",
+      "name": "VIctory",
+      "repository": "https://github.com/Marvisak/VIctory",
+      "branch": "main",
+      "commit": "d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989",
+      "license": "GPL-3.0-or-later",
+      "license_evidence": "LICENSE, Cargo.toml and README fetched from upstream main on 2026-11-24",
+      "graphics_path": "Xbox D3D12.X to host D3D12; RDNA2 shaders to DXIL",
+      "role": "gta_vi_boot_and_d3d12_candidate",
+      "checkout": null,
+      "source_import_allowed": false,
+      "notes": "README dated 2026-11-23 reports menu and world-loading progress but incomplete world rendering and a real-GPU hang/reset warning."
+    },
+    {
+      "id": "leonida",
+      "name": "Leonida",
+      "repository": "https://github.com/ProjectLeonida/Leonida",
+      "branch": "main",
+      "commit": null,
+      "license": "GPL-3.0",
+      "license_evidence": "Public GitHub repository page declares GPL-3.0; exact LICENSE blob and commit SHA still need connector verification",
+      "graphics_path": "Xbox D3D12 to Vulkan; RDNA2 shaders to SPIR-V",
+      "role": "gta_vi_vulkan_shader_asset_and_runtime_candidate",
+      "checkout": null,
+      "source_import_allowed": false,
+      "notes": "Public README and active issue/PR activity inspected on 2026-11-24. Pin exact commit and verify all third-party notices before any source-level use."
+    }
+  ]
+}
