@@ -83,3 +83,20 @@ jobs:
           path: tools/host_probe/host_caps.exe
           if-no-files-found: error
           retention-days: 14
+      - name: Execute native probe on the CI host
+        shell: pwsh
+        run: |
+          $output = & tools\host_probe\host_caps.exe
+          $code = $LASTEXITCODE
+          if ($code -ne 0) {
+            throw "host_caps.exe exited with code $code"
+          }
+          $probe = ($output | Out-String) | ConvertFrom-Json
+          if ($null -eq $probe.cpu -or $null -eq $probe.adapters) {
+            throw "Native probe did not return the expected JSON structure."
+          }
+          Write-Host "Native probe executed and returned valid JSON."
+      - name: Exercise readable summary with a synthetic host fixture
+        shell: pwsh
+        run: |
+          ./tools/host_probe/Summarize-HostInfo.ps1 -InputPath examples/host-probe/synthetic.json
