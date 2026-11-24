@@ -96,14 +96,14 @@ Before any large build or runtime attempt, gather a read-only inventory:
 | Capability | Why it matters |
 |---|---|
 | Windows version/build and architecture | Runtime and SDK compatibility |
-| CPU model and AVX2 | VIctory/Leonida prerequisites and shader/tool workloads |
+| CPU model and AVX2, CLWB, CLZERO, MONITORX/MWAITX and SSE4A | Runtime prerequisites and title instruction compatibility |
 | Installed RAM and Windows committed/commit limit | Loader and asset-processing headroom |
 | GPU model, VRAM and driver | Actual graphics backend and memory limits |
 | D3D12 feature level, shader model and mesh shader tier | XCL/VIctory graphics requirements |
 | Vulkan API version, extensions, subgroup size and mesh shader support | Leonida's Vulkan backend and Wave64 strategy |
 | Free space on selected work/output volumes | Avoid unexpectedly starting multi-hundred-GB jobs |
 
-The probe must not scan for game packages, inspect private directories, change the page file, install SDKs, download drivers, or launch an upstream runtime. It reports facts and recommendations only.
+The native probe reads CPUID and queries DXGI/D3D12 device features, but submits no GPU work. The PowerShell wrapper may optionally capture an existing `vulkaninfo --summary` output. The probe must not scan for game packages, inspect private directories, change the page file, install SDKs, download drivers, or launch an upstream runtime. It reports facts and recommendations only.
 
 ### Known host to evaluate
 
