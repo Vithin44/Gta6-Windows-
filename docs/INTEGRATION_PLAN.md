@@ -24,7 +24,8 @@
 - [ ] Pin Leonida to a full 40-character commit SHA and capture its full LICENSE, third-party notices and submodule revisions.
 - [x] Pin XCL and VIctory to full commit SHAs and inspect key loader, runtime, D3D12 and shader source files at those revisions.
 - [ ] Record top-level and dependency licenses, including submodules and generated/test data.
-- [x] Compare the documented loader, TLS, import resolution, filesystem, runtime services, D3D12.X, shader translation, audio and input paths for XCL and VIctory.\n- [ ] Complete the same file-level comparison for Leonida after its source revision is reachable.
+- [x] Compare the documented loader, TLS, import resolution, filesystem, runtime services, D3D12.X, shader translation, audio and input paths for XCL and VIctory.
+- [ ] Complete the same file-level comparison for Leonida after its source revision is reachable.
 - [ ] Separate synthetic tests, tests using public samples, and tests requiring user-owned title data.
 - [ ] Inspect CI workflows and recent failures; distinguish passing tests from skipped tests.
 
@@ -66,7 +67,8 @@ The probe must collect actual Windows version, CPU feature flags, installed/comm
 - [x] Implement a versioned JSON run-report schema.
 - [x] Add a validator for project-owned reports and a synthetic fixture.
 - [x] Validate the manifest, report fixture and PowerShell syntax in GitHub Actions; compile the native C++ probe in Windows CI.
-- [x] Add conservative normalizers for XCL report.json and VIctory crash/console logs.\n- [ ] Add a Leonida adapter after its test artifact formats and exact revision are verified.
+- [x] Add conservative normalizers for XCL report.json and VIctory crash/console logs.
+- [ ] Add a Leonida adapter after its test artifact formats and exact revision are verified.
 - [ ] Preserve original logs; normalized reports link to local copies instead of replacing them.
 - [ ] Record the exact commit, host, driver, test and stage for every run.
 - [ ] Add redaction for usernames and absolute paths before sharing reports.
@@ -140,16 +142,20 @@ Otherwise, keep this repository as an orchestration, comparison and diagnostics 
 |---|---|---|
 | GPL-2.0-only vs GPL-3.x | Cannot assume one combined derivative is distributable | Keep runtimes separate; review before code reuse |
 | Leonida exact revision unavailable through current connector | Cannot claim a pinned source audit | Capture SHA and license through a verified Git source before pinning |
-| README status may lag current upstream issue/PR activity | Maturity comparisons can be wrong | Use commit-specific tests, CI and recent issue evidence |
-| RX 6600 feature support not measured | A backend may fail before game-specific code runs | Host capability probe first |\n| 16 GB RAM vs upstream-reported 36–40 GB commit growth | XCL world-loading tests may exhaust commit or stall | Measure commit limit/free memory; do not start title runs until synthetic builds and memory requirements are understood |\n| Leonida full asset stage requires about 400 GiB free | A full asset build could consume most of the 1 TB SSD | Prefer the documented reduced check/shader/runtime stages first; measure free disk space |
+| RX 6600 feature support not measured | A backend may fail before game-specific code runs | Host capability probe first |
+| 16 GB RAM vs upstream-reported 36–40 GB commit growth | XCL world-loading tests may exhaust commit or stall | Measure commit limit/free memory; do not start title runs until synthetic builds and memory requirements are understood |
+| Leonida full asset stage requires about 400 GiB free | A full asset build could consume most of the 1 TB SSD | Prefer the documented reduced check/shader/runtime stages first; measure free disk space |
+| 16 GB RAM vs upstream-reported 36–40 GB commit growth | XCL world-loading tests may exhaust commit or stall | Measure commit limit/free memory; do not start title runs until synthetic builds and memory requirements are understood |
+| Leonida full asset stage requires about 400 GiB free | A full asset build could consume most of the 1 TB SSD | Prefer the documented reduced check/shader/runtime stages first; measure free disk space |
 | 16 GB RAM and unknown free disk space | Build/runtime may exhaust commit or storage | Measure first; avoid full asset build by default |
 | Driver hang/reset risk | System instability or lost work | Synthetic tests, diagnostic fallback, stop on reset |
 | User data could be accidentally committed | Copyright/privacy/security risk | Keep all game data outside repo; ignore output folders |
 
 ## Immediate next actions
 
-1. Finish the Leonida revision/license capture.
-2. Complete the source-level feature matrix for XCL and VIctory.
-3. Commit a pinned upstream manifest and the report schema.
-4. Implement the read-only Windows host probe.
-5. Only then decide which independent runtime to build first.
+1. Verify the Windows host-probe artifact workflow and retain its executable artifact.
+2. Obtain Leonida's exact commit and full license/submodule provenance through a verified source endpoint.
+3. Run the report-normalizer tests in CI and fix any regressions.
+4. Collect the target PC's CPU, RAM/commit, RX 6600 driver, D3D12 and Vulkan capabilities.
+5. Build VIctory and XCL independently using their own synthetic/unit tests before any authorized title-data workflow.
+6. Add a Leonida report adapter only after its progress-dashboard/test artifact format is inspected at a pinned revision.
