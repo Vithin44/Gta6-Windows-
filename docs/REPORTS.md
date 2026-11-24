@@ -26,7 +26,7 @@ python tools/report/normalize_upstream.py xcl "D:\logs\xcl\report.json" --input-
 
 Supply `--commit` with the full 40-character XCL commit when known. Use `--host-report` to attach the output of the Windows host probe.
 
-The adapter maps the exit/crash state and module/stub counts. It deliberately does not treat frame counters as proof of a visible scene.
+The adapter maps the exit/crash state and module/stub counts. It deliberately does not treat frame counters as proof of a visible scene. XCL's report has no run timestamp; pass `--timestamp` if you know when the run happened, otherwise the adapter records the normalization time and adds a warning.
 
 ## Import VIctory logs
 
@@ -36,7 +36,7 @@ VIctory writes `crashes.log` when a crash or panic is reported. If you also save
 python tools/report/normalize_upstream.py victory "D:\logs\victory\crashes.log" --console-log "D:\logs\victory\console.txt" --run-start-utc "2026-11-24T13:00:00Z" --input-class user_owned_local_data --output "D:\logs\normalized-victory.json"
 ```
 
-The adapter recognizes explicit loader mapping and title-exit markers. VIctory appends to its crash log, so use a run-specific copy or provide `--run-start-utc` to ignore older entries. A crash log alone proves only that the run produced a crash report; it does not prove which visual stage was reached.
+The adapter recognizes explicit loader mapping and title-exit markers. If no crash timestamp is present, pass `--timestamp` for the run time. VIctory appends to its crash log, so use a run-specific copy or provide `--run-start-utc` to ignore older entries. A crash log alone proves only that the run produced a crash report; it does not prove which visual stage was reached.
 
 ## Input classification
 
