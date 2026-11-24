@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/gta6-windows/run-report.schema.json",
+  "title": "GTA VI Windows Research Run Report",
+  "description": "Project-owned evidence record. It must contain metadata and results only, never game files or extracted assets.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "timestamp_utc",
+    "upstream",
+    "host",
+    "test",
+    "result"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "upstream": {
+      "type": "object",
+      "required": ["id", "repository", "commit"],
+      "properties": {
+        "id": {
+          "enum": ["xcl", "victory", "leonida", "local_tool"]
+        },
+        "repository": {
+          "type": "string"
+        },
+        "commit": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "working_tree_clean": {
+          "type": ["boolean", "null"]
+        },
+        "build_configuration": {
+          "type": ["string", "null"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "host": {
+      "type": "object",
+      "required": ["os", "architecture"],
+      "properties": {
+        "os": {
+          "type": "string"
+        },
+        "os_build": {
+          "type": ["string", "null"]
+        },
+        "architecture": {
+          "type": "string"
+        },
+        "cpu": {
+          "type": ["string", "null"]
+        },
+        "cpu_features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ram_total_mb": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "commit_limit_mb": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "gpu": {
+          "type": ["string", "null"]
+        },
+        "gpu_driver": {
+          "type": ["string", "null"]
+        },
+        "gpu_vram_mb": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "graphics_api": {
+          "enum": ["d3d12", "vulkan", "none", "unknown"]
+        },
+        "feature_checks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["boolean", "string", "number", "null"]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "test": {
+      "type": "object",
+      "required": ["name", "input_class", "command"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "input_class": {
+          "enum": ["synthetic_fixture", "public_sample", "user_owned_local_data", "host_probe"]
+        },
+        "command": {
+          "type": "string"
+        },
+        "tool_versions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "duration_ms": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "required": ["status", "exit_code", "stage_reached"],
+      "properties": {
+        "status": {
+          "enum": ["passed", "failed", "skipped", "blocked", "unknown"]
+        },
+        "exit_code": {
+          "type": ["integer", "null"]
+        },
+        "stage_reached": {
+          "enum": [
+            "not_started",
+            "process_started",
+            "loader_initialized",
+            "runtime_initialized",
+            "menu_presented",
+            "world_loaded",
+            "scene_rendered",
+            "playable"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "crash_code": {
+          "type": ["string", "null"]
+        },
+        "log_reference": {
+          "type": ["string", "null"],
+          "description": "A local relative path chosen by the user. Do not embed log contents or secrets."
+        }
+      },
+      "additionalProperties": false
+    },
+    "privacy_reviewed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}
