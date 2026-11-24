@@ -1,5 +1,7 @@
 # GTA VI Windows Research
 
+[![Validate research artifacts](https://github.com/Vithin44/Gta6-Windows-/actions/workflows/validate-research.yml/badge.svg)](https://github.com/Vithin44/Gta6-Windows-/actions/workflows/validate-research.yml) [![Independent upstream smoke tests](https://github.com/Vithin44/Gta6-Windows-/actions/workflows/upstream-smoke.yml/badge.svg)](https://github.com/Vithin44/Gta6-Windows-/actions/workflows/upstream-smoke.yml)
+
 Independent research and compatibility-engineering workspace.
 
 ## Objective
