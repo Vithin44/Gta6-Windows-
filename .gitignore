@@ -1,0 +1,44 @@
+# Local build and orchestration output
+/build/
+/out/
+/work/
+/cache/
+/.cache/
+/artifacts/
+/reports/local/
+/local-data/
+/private-data/
+
+# Game packages and common derived game data (never commit)
+/*.xvc
+/*.msixvc
+*.xvc
+*.msixvc
+*.rpf
+*.ttpf
+*.awc
+*.bk2
+*.xvd
+*.sav
+*.dds
+*.bc7
+
+# Local machine configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Crash dumps and process memory captures
+*.dmp
+*.mdmp
+*.core
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
