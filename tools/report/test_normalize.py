@@ -57,7 +57,7 @@ class NormalizeUpstreamTests(unittest.TestCase):
             self.assertEqual("passed", report["result"]["status"])
             self.assertEqual("loader_initialized", report["result"]["stage_reached"])
             self.assertNotIn("C:/private/user/game.exe", json.dumps(report))
-            self.assertEqual(1, report["upstream"]["commit"] is not None)
+            self.assertIsNotNone(report["upstream"]["commit"])
             self.assert_valid_schema(report)
 
     def test_xcl_crash_is_failed_and_raw_crash_is_not_copied(self) -> None:
