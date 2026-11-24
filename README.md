@@ -32,9 +32,9 @@ The projects remain separate. Their code is not being blindly copied or combined
 
 **Status:** research and architecture stage
 
-The repository now contains an upstream audit, an integration architecture, a staged execution plan, contribution rules, an upstream manifest and a normalized run-report schema.
+The repository now contains an upstream audit, a source-level feature matrix, an integration architecture, a staged execution plan, contribution rules, an upstream manifest, a normalized run-report schema and a read-only Windows host probe. GitHub Actions has compiled the native CPU/D3D12 probe and validated the PowerShell syntax and synthetic report.
 
-No GTA VI launch or gameplay has been performed by this repository. Upstream status statements are attributed to their respective projects and are not our own test results.
+The host probe has not yet been run on the target PC. No GTA VI launch or gameplay has been performed by this repository. Upstream status statements are attributed to their respective projects and are not our own test results.
 
 ## Roadmap
 
