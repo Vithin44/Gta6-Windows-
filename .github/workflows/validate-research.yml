@@ -58,6 +58,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up MSVC environment
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Compile native capability probe
+      - name: Build native capability probe
         shell: pwsh
-        run: cl /nologo /std:c++17 /EHsc /W4 /c tools\host_probe\host_caps.cpp /Fo:host_caps.obj
+        run: cl /nologo /std:c++17 /EHsc /W4 tools\host_probe\host_caps.cpp /link d3d12.lib dxgi.lib /OUT:tools\host_probe\host_caps.exe
+      - name: Upload native probe executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-host-probe
+          path: tools/host_probe/host_caps.exe
+          if-no-files-found: error
+          retention-days: 14
