@@ -34,7 +34,7 @@ The projects remain separate. Their code is not being blindly copied or combined
 
 The repository now contains an upstream audit, a source-level feature matrix, an integration architecture, a staged execution plan, contribution rules, a pinned upstream manifest where source access permits, a normalized run-report schema, XCL/VIctory report adapters and a read-only Windows host probe. GitHub Actions validates the synthetic report and adapter tests, parses the PowerShell script, and builds a downloadable Windows probe executable.
 
-The host probe has not yet been run on the target PC. Leonida's exact commit and full dependency/license provenance are still unpinned. No GTA VI launch or gameplay has been performed by this repository. Upstream status statements are attributed to their respective projects and are not our own test results.
+The pinned XCL and VIctory no-title-data smoke tests passed on a hosted Windows Server 2025 runner: XCL 700 passed/0 failed (GPU tests skipped where the runner lacked features); VIctory 264 passed/0 failed. The latest host probe has not yet been run on the target PC. Leonida's exact commit and full dependency/license provenance are still unpinned. No GTA VI launch or gameplay has been performed by this repository.
 
 ## Roadmap
 
