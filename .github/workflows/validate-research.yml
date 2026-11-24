@@ -100,3 +100,14 @@ jobs:
         shell: pwsh
         run: |
           ./tools/host_probe/Summarize-HostInfo.ps1 -InputPath examples/host-probe/synthetic.json
+      - name: Exercise read-only inventory end to end on CI host
+        shell: pwsh
+        run: |
+          $reportPath = Join-Path $env:RUNNER_TEMP "host-probe-ci.json"
+          ./tools/host_probe/Collect-HostInfo.ps1 -IncludeD3D12Info -OutputPath $reportPath
+          ./tools/host_probe/Summarize-HostInfo.ps1 -InputPath $reportPath
+          $report = Get-Content -LiteralPath $reportPath -Raw | ConvertFrom-Json
+          if ($report.safety.gameFilesScanned -ne $false -or $report.safety.gameProcessesLaunched -ne $false) {
+            throw "Host probe safety invariants were not preserved."
+          }
+          Write-Host "Read-only inventory and summary completed on the CI host."
