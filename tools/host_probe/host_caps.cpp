@@ -140,7 +140,6 @@ static const char* mesh_tier_name(D3D12_MESH_SHADER_TIER tier) {
     switch (tier) {
     case D3D12_MESH_SHADER_TIER_NOT_SUPPORTED: return "not_supported";
     case D3D12_MESH_SHADER_TIER_1: return "1";
-    case D3D12_MESH_SHADER_TIER_1_1: return "1_1";
     default: return "unknown";
     }
 }
