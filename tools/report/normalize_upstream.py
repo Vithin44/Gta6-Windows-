@@ -262,6 +262,8 @@ def normalize_xcl(args: argparse.Namespace) -> dict[str, Any]:
         "This adapter intentionally omits executable paths, module addresses and raw crash text.",
         "Presentation counters do not prove that a scene rendered; no menu, world or gameplay stage is inferred.",
     ]
+    if not args.timestamp:
+        warnings.append("XCL report.json has no run timestamp; timestamp_utc is the normalization time unless --timestamp is supplied.")
     if called_stubs:
         warnings.append(f"XCL recorded {len(called_stubs)} runtime stub entries; inspect the original report locally.")
     if stubbed_imports:
@@ -287,6 +289,24 @@ def normalize_victory(args: argparse.Namespace) -> dict[str, Any]:
     console_text = ""
     if args.console_log:
         console_text = args.console_log.read_text(encoding="utf-8-sig", errors="replace")
+    run_start = None
+    if args.run_start_utc:
+        try:
+            run_start = datetime.fromisoformat(args.run_start_utc.replace("Z", "+00:00"))
+            if run_start.tzinfo is None or "T" not in args.run_start_utc:
+                raise ValueError("timezone and time are required")
+        except ValueError as exc:
+            raise ValueError("--run-start-utc must be a timezone-aware ISO 8601 date-time") from exc
+
+    if run_start is not None:
+        sections = re.split(r"(?m)(?=^unix time \d+, process \d+\s*$)", crash_text)
+        selected = []
+        for section in sections:
+            match = re.search(r"(?m)^unix time (\d+), process \d+\s*$", section)
+            if match and datetime.fromtimestamp(int(match.group(1)), tz=timezone.utc) >= run_start:
+                selected.append(section)
+        crash_text = "".join(selected)
+
     combined = console_text + "\n" + crash_text
 
     report = base_report(
@@ -333,6 +353,10 @@ def normalize_victory(args: argparse.Namespace) -> dict[str, Any]:
         "VIctory's crash log and console output do not establish that a menu, world, scene or playable session was rendered.",
         "Raw log text, absolute paths, process IDs and memory addresses are not copied into the normalized report.",
     ]
+    if not args.timestamp and not unix_times:
+        warnings.append("No run timestamp was present; timestamp_utc is the normalization time unless --timestamp is supplied.")
+    if crash_present and not args.run_start_utc:
+        warnings.append("VIctory appends crash records; confirm this input is a run-specific copy or supply --run-start-utc to exclude older records.")
     errors = ["VIctory produced a crash log; raw crash text was omitted for privacy."] if crash_present else []
     report["result"].update({
         "status": status,
@@ -357,6 +381,7 @@ def build_parser() -> argparse.ArgumentParser:
         sub.add_argument("source", type=Path, help="XCL report.json or VIctory crashes.log")
         if upstream == "victory":
             sub.add_argument("--console-log", type=Path, help="optional captured VIctory console output")
+            sub.add_argument("--run-start-utc", help="ignore appended crash-log entries older than this timezone-aware ISO 8601 time")
         sub.add_argument("--host-report", type=Path, help="optional Collect-HostInfo.ps1 JSON output")
         sub.add_argument("--commit", help="full 40-character upstream commit SHA")
         sub.add_argument("--run-id")
