@@ -22,7 +22,7 @@
 **Status: in progress**
 
 - [ ] Pin Leonida to a full 40-character commit SHA and capture its full LICENSE, third-party notices and submodule revisions.
-- [ ] Refresh XCL and VIctory to exact commit snapshots before any later source-level comparison.
+- [x] Pin XCL and VIctory to full commit SHAs and inspect key loader, runtime, D3D12 and shader source files at those revisions.
 - [ ] Record top-level and dependency licenses, including submodules and generated/test data.
 - [ ] Compare loader, TLS, import resolution, filesystem, runtime services, D3D12.X, shader translation, audio and input implementations.
 - [ ] Separate synthetic tests, tests using public samples, and tests requiring user-owned title data.
