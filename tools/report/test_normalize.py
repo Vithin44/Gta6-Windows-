@@ -72,6 +72,8 @@ class NormalizeUpstreamTests(unittest.TestCase):
                             "cpu": {"avx2_hardware": True, "clwb": False},
                             "adapters": [{
                                 "name": "AMD Radeon RX 6600",
+                                "device_id": 29695,
+                                "amd_gfx_target": "gfx1032",
                                 "dedicated_video_memory_bytes": 8589934592,
                                 "d3d12_available": True,
                                 "shader_model": "6_7",
