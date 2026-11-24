@@ -15,7 +15,7 @@
       "role": "general_xbox_series_reference",
       "checkout": null,
       "source_import_allowed": false,
-      "notes": "Not a GTA VI-specific runtime. Its README reports other retail-title results."
+      "notes": "Latest main was rechecked on 2026-11-24 and remains pinned to 64b3f35599bb7102f55d640e1a791e7d6dd3b175. Issue #646 reports a GTA VI 1.0.2.1 run reaching the language screen/loading art before world-loading failure; the issue's test revision differs from this manifest pin."
     },
     {
       "id": "victory",
@@ -23,13 +23,13 @@
       "repository": "https://github.com/Marvisak/VIctory",
       "branch": "main",
       "commit": "d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989",
-      "license": "GPL-3.0-or-later",
-      "license_evidence": "LICENSE, Cargo.toml and README fetched from upstream main on 2026-11-24",
+      "license": "GPL-3.0",
+      "license_evidence": "LICENSE is GNU GPL version 3; Cargo.toml declares GPL-3.0-or-later. Latest main checked 2026-11-24 at d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989.",
       "graphics_path": "Xbox D3D12.X to host D3D12; RDNA2 shaders to DXIL",
       "role": "gta_vi_boot_and_d3d12_candidate",
       "checkout": null,
       "source_import_allowed": false,
-      "notes": "README dated 2026-11-23 reports menu and world-loading progress but incomplete world rendering and a real-GPU hang/reset warning."
+      "notes": "Latest main checked 2026-11-24 at d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989. README reports menu/intro/world-load progress but no playable scene; real-GPU driver hang/reset risk. Current loader source emulates selected AMD-only instructions (CLZERO, MONITORX/MWAITX, CLWB patterns and SSE4A), but this does not prove every CPU path is compatible."
     },
     {
       "id": "leonida",
@@ -37,13 +37,14 @@
       "repository": "https://github.com/ProjectLeonida/Leonida",
       "branch": "main",
       "commit": null,
-      "license": "GPL-3.0",
-      "license_evidence": "Public GitHub repository page declares GPL-3.0; exact LICENSE blob and commit SHA still need connector verification",
+      "license": "GPL-3.0-or-later",
+      "license_evidence": "GitHub repository page declares GPL-3.0; README states GPLv3 (or any later version). Full LICENSE blob could not be fetched through the available GitHub connector; verify its exact text before source reuse.",
       "graphics_path": "Xbox D3D12 to Vulkan; RDNA2 shaders to SPIR-V",
       "role": "gta_vi_vulkan_shader_asset_and_runtime_candidate",
       "checkout": null,
       "source_import_allowed": false,
-      "notes": "Public README and active issue/PR activity inspected on 2026-11-24. Pin exact commit and verify all third-party notices before any source-level use."
+      "notes": "Current public README inspected 2026-11-24: no GTA VI boot/playable state; 26,503 shaders translated with documented SPIR-V validation runs; GPU test suite results span 30+ GPU/driver combinations; D3D12-to-Vulkan remains in progress. The README clone URL is ItsNotRexed/Leonida and the repository page resolves to ProjectLeonida/Leonida. GitHub API/file retrieval returned 404 in this connector, so exact main SHA, LICENSE blob, submodule revisions and complete dependency provenance remain unpinned.",
+      "clone_url": "https://github.com/ItsNotRexed/Leonida"
     }
   ]
 }
