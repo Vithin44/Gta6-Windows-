@@ -8,7 +8,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
 
-from normalize_upstream import normalize_victory, normalize_xcl
+from normalize_upstream import normalize_victory, normalize_xcl, safe_log_reference
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -38,6 +38,71 @@ class NormalizeUpstreamTests(unittest.TestCase):
     def assert_valid_schema(self, report: dict) -> None:
         errors = sorted(VALIDATOR.iter_errors(report), key=lambda error: error.message)
         self.assertEqual([], [error.message for error in errors])
+
+    def test_host_probe_is_mapped_into_normalized_host_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "report.json"
+            host = root / "host-probe.json"
+            source.write_text(json.dumps({
+                "xcl_version": "0.1.0",
+                "title": "Synthetic Title",
+                "crash": None,
+                "exit_code": 0,
+                "modules": [],
+                "stubbed_imports": [],
+                "called_stubs": [],
+            }), encoding="utf-8")
+            host.write_text(json.dumps({
+                "operatingSystem": {"caption": "Windows 11", "buildNumber": "26100", "architecture": "64-bit"},
+                "processors": [{"name": "AMD Ryzen 5 5500"}],
+                "memory": {
+                    "totalPhysicalBytes": 17179869184,
+                    "committedBytes": 8589934592,
+                    "commitLimitBytes": 34359738368,
+                },
+                "cpuFeatures": {"avx2": True},
+                "graphics": {
+                    "adapters": [{"name": "AMD Radeon RX 6600", "driverVersion": "test-driver"}],
+                    "d3d12": {
+                        "queried": True,
+                        "result": {
+                            "cpu": {"avx2_hardware": True, "clwb": False},
+                            "adapters": [{
+                                "name": "AMD Radeon RX 6600",
+                                "dedicated_video_memory_bytes": 8589934592,
+                                "d3d12_available": True,
+                                "shader_model": "6_7",
+                                "wave_ops": True,
+                                "wave_lane_min": 32,
+                                "wave_lane_max": 64,
+                                "mesh_shader_tier": "not_supported",
+                            }],
+                        },
+                    },
+                    "vulkan": {"queried": False},
+                },
+            }), encoding="utf-8")
+            args = common_args(source, "xcl")
+            args.host_report = host
+            report = normalize_xcl(args)
+
+            self.assertEqual("Windows 11", report["host"]["os"])
+            self.assertEqual(16384, report["host"]["ram_total_mb"])
+            self.assertEqual(8192, report["host"]["committed_mb"])
+            self.assertEqual(32768, report["host"]["commit_limit_mb"])
+            self.assertEqual(24576, report["host"]["commit_remaining_mb"])
+            self.assertEqual("AMD Radeon RX 6600", report["host"]["gpu"])
+            self.assertEqual(8192, report["host"]["gpu_vram_mb"])
+            self.assertEqual("6_7", report["host"]["feature_checks"]["shader_model"])
+            self.assertIn("avx2_hardware", report["host"]["cpu_features"])
+            self.assert_valid_schema(report)
+
+    def test_log_reference_rejects_absolute_and_parent_paths(self) -> None:
+        with self.assertRaises(ValueError):
+            safe_log_reference("C:\\private\\secret.log", Path("fallback.log"))
+        with self.assertRaises(ValueError):
+            safe_log_reference("../secret.log", Path("fallback.log"))
 
     def test_xcl_report_is_normalized_without_paths_or_raw_crash_text(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
