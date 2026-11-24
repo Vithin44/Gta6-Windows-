@@ -5,13 +5,13 @@
 
 ## Executive summary
 
-These projects overlap in Xbox Series compatibility work, but they are not interchangeable modules. DedSec is an additional preliminary candidate whose source could not be inspected in this audit. They use different graphics paths, have different maturity claims, and carry copyleft licenses that prevent us from assuming their source can be merged into one combined derivative.
+These projects overlap in Xbox Series compatibility work, but they are not interchangeable modules. XCL and VIctory/Leonida have copyleft license constraints; DedSec is a preliminary candidate whose README claims MIT but whose license and source could not be inspected in this audit. Their graphics paths and maturity claims differ.
 
 | Project | Declared license | Main approach | GTA VI evidence in current public docs | Disposition |
 |---|---|---|---|---|
 | [XCL](https://github.com/ivall/xcl) | GPL-2.0-only | Xbox services/HLE; D3D12.X-to-host-D3D12; RDNA2-to-HLSL/DXIL | Issue #646 reports a 1.0.2.1 run reaching the language screen and loading art, then failing during world loading. | General Xbox compatibility reference and separate runtime candidate. |
 | [VIctory](https://github.com/Marvisak/VIctory) | GPL-3.0-or-later in Cargo metadata; LICENSE is GPL v3 | Windows PE loader; HLE; D3D12.X-to-host-D3D12; RDNA2-to-DXIL | README reports menus, intro video and world loading, but no playable rendered scene; warns of real-GPU hangs/resets. | Strongest documented real-title boot progress in this audit; prioritize independent build/test comparison. |
-| [Leonida](https://github.com/ProjectLeonida/Leonida) | GPLv3-or-later stated in README; GitHub page labels GPL-3.0 | Static recompilation; D3D12-to-Vulkan; RDNA2-to-SPIR-V; asset/shader tooling | README says GTA VI does not boot yet. It reports 26,503 shader translations and broad GPU tests, while the real executable path remains untested. | Valuable shader, Vulkan, GPU-test and asset-format research; not a boot-ready runtime. |
+| [Leonida](https://github.com/ProjectLeonida/Leonida) | GPLv3-or-later stated in README; GitHub page labels GPL-3.0 | Static recompilation; D3D12-to-Vulkan; RDNA2-to-SPIR-V; asset/shader tooling | README says GTA VI does not boot yet. It reports 26,503 shader translations and broad GPU tests, while the real executable path remains untested. | Valuable shader, Vulkan, GPU-test and asset-format research; not a boot-ready runtime. |\n| [DedSec](https://github.com/Hylanderry/DedSec) | MIT claimed by README; LICENSE blob unverified | Xbox Series → Windows; RDNA2-to-HLSL/SM 6.6/DXIL; native D3D12 | README explicitly says boot pending and not playable; PE loader partial, D3D12 Xbox ABI proxy in progress. Source/API returned 404 during audit. | Candidate for D3D12 shader, GDeflate, XTaskQueue, audio/input and diagnostics comparison; no code reuse yet. |
 
 ## Revision records
 
@@ -21,9 +21,9 @@ Revisions are immutable commit identifiers where the GitHub connector exposed th
 |---|---|---|---|
 | XCL | `main` | `64b3f35599bb7102f55d640e1a791e7d6dd3b175` | Rechecked against GitHub's main-branch API on 2026-11-24; README, Cargo.toml, LICENSE, HANDOFF/design docs, THIRD_PARTY.md and report source inspected. |
 | VIctory | `main` | `d2a4bae1f49533ef5cb512fd1b1ba1513f2e1989` | Rechecked against GitHub's main-branch API on 2026-11-24; README, Cargo.toml, LICENSE, architecture, loader and crash-handler source inspected. |
-| Leonida | `main` | **Not pinned** | The public page is available and its README was inspected, but GitHub API/file retrieval returned 404 through the connected GitHub interface. The README's clone URL is `https://github.com/ItsNotRexed/Leonida`; the page resolves to `ProjectLeonida/Leonida`. Exact SHA, LICENSE blob and submodule revisions remain unverified. |
+| Leonida | `main` | **Not pinned** | The public page is available and its README was inspected, but GitHub API/file retrieval returned 404 through the connected GitHub interface. The README's clone URL is `https://github.com/ItsNotRexed/Leonida`; the page resolves to `ProjectLeonida/Leonida`. Exact SHA, LICENSE blob and submodule revisions remain unverified. |\n| DedSec | `dedsec-clean` (cached page only) | **Not pinned** | Search index showed 37 commits and a repository tree, but direct GitHub page/API and raw source requests returned 404. No exact SHA, LICENSE blob, source or submodule revisions verified. See `docs/DEDSEC_AUDIT.md`. |
 
-The manifest stores these states in `manifests/upstreams.json`. A null Leonida SHA is intentional; never invent a revision from a moving branch or a cached page.
+The manifest stores these states in `manifests/upstreams.json`. Null Leonida and DedSec SHAs are intentional; never invent a revision from a moving branch or cached page.
 
 ## XCL
 
@@ -52,6 +52,14 @@ The manifest stores these states in `manifests/upstreams.json`. A null Leonida S
 - Our isolated smoke workflow ran `cargo test --workspace --locked` at the pinned revision: 264 tests passed, 0 failed, 4 ignored. No title data was configured or used.
 - No stable, versioned JSON run-report format was found in the inspected source. Our adapter therefore imports the text crash log and optional console output conservatively; it does not infer visual progress.
 
+## DedSec — preliminary only
+
+See the detailed [DedSec audit](DEDSEC_AUDIT.md). The cached README describes an Xbox-to-Windows/D3D12 implementation with RDNA2-to-HLSL/DXIL, GDeflate, XTaskQueue, audio/input shims and rendering optimizations. It explicitly states that real-title boot is pending and gameplay has not been achieved.
+
+The search index showed branch `dedsec-clean`, 37 commits and a repository tree, but direct GitHub page/API access returned 404 during this audit. No exact commit SHA, LICENSE blob, source files, build logs, workflow runs, releases or submodule revisions could be verified. The README says MIT, but this is not license verification. Do not import code or add DedSec to build CI until access and provenance are restored.
+
+AMD documents the RX 6600 as RDNA2 `gfx1032`, while DedSec's README emphasizes `gfx1030`. Treat exact-target support as an open compatibility test, not an automatic pass based on the shared RDNA2 family.
+
 ## Leonida
 
 - The public README describes a native recompilation project: Xbox x86-64 title code runs natively while console services are reimplemented; RDNA2 programs are translated to SPIR-V for Vulkan.
@@ -71,7 +79,7 @@ Workflow [run #2](https://github.com/Vithin44/Gta6-Windows-/actions/runs/4532973
 ## License and integration constraints
 
 1. XCL is GPL-2.0-only. VIctory and Leonida are GPL-3.x. Do not assume these can be combined into one derived executable.
-2. Keep the three runtimes in independent checkouts/processes. This repository can provide orchestration, capability probes, normalized reports, test comparison and documentation without copying their runtime code.
+2. Keep every upstream runtime in an independent checkout/process. This repository can provide orchestration, capability probes, normalized reports, test comparison and documentation without copying their runtime code.
 3. Separate processes and a neutral interchange format are an engineering boundary, not an automatic legal conclusion for every distribution model. This document is not legal advice.
 4. Third-party dependencies, generated tables, test vectors, submodules and copied snippets have their own terms. A top-level license is not a complete provenance audit.
 5. This research repository has no selected software license. Do not assume an upstream license automatically licenses this repository or its original material.
