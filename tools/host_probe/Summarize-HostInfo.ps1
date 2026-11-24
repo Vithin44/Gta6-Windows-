@@ -43,6 +43,10 @@ $gpuDriver = Get-Prop $gpu "driverVersion"
 $gpuVram = Get-Prop $nativeGpu "dedicated_video_memory_bytes"
 $commitLimit = Get-Prop $report.memory "commitLimitBytes"
 $committed = Get-Prop $report.memory "committedBytes"
+$freeRamKb = Get-Prop $report.memory "freePhysicalMemoryKb"
+$ramFreeBytes = $null
+if ($null -ne $freeRamKb) { $ramFreeBytes = [double]$freeRamKb * 1KB }
+$ramAvailableMb = Get-Prop $report.memory "availableMBytes"
 $commitLeft = $null
 if ($null -ne $commitLimit -and $null -ne $committed) {
     $commitLeft = [math]::Max([double]0, [double]$commitLimit - [double]$committed)
@@ -55,7 +59,7 @@ Write-Host "Windows:   $($report.operatingSystem.caption) (build $($report.opera
 Write-Host "CPU:       $(Get-Prop $cpu 'name')"
 Write-Host "CPU flags: AVX2=$(Get-Prop $nativeCpu 'avx2_hardware'); AVX state=$(Get-Prop $nativeCpu 'avx_os_state_enabled'); CLWB=$(Get-Prop $nativeCpu 'clwb'); CLZERO=$(Get-Prop $nativeCpu 'clzero'); MONITORX=$(Get-Prop $nativeCpu 'monitorx'); SSE4A=$(Get-Prop $nativeCpu 'sse4a')"
 Write-Host "RAM:       $(Format-Gb $report.memory.totalPhysicalBytes)"
-Write-Host "RAM free:  $(Format-Gb ([double]$report.memory.freePhysicalMemoryKb * 1KB)) (available $($report.memory.availableMBytes) MB)"
+Write-Host "RAM free:  $(Format-Gb $ramFreeBytes) (available $ramAvailableMb MB)"
 Write-Host "Committed: $(Format-Gb $committed) / $(Format-Gb $commitLimit)"
 Write-Host "Commit left: $(Format-Gb $commitLeft)"
 Write-Host "Pagefile:  $(Get-Prop $report.memory 'pageFileAllocatedMb') MB allocated; $(Get-Prop $report.memory 'pageFileCurrentUsageMb') MB in use"
