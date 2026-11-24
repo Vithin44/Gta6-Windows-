@@ -35,7 +35,8 @@ The manifest stores these states in `manifests/upstreams.json`. A null Leonida S
 - Issue [#646](https://github.com/ivall/xcl/issues/646) reports GTA VI 1.0.2.1 reaching the language screen and rendering loading art on an RTX 3060 12 GB, then failing during world loading. The issue reports peak system commit around 36 GB and local VRAM around 12.9 GB. It is an upstream issue report, not a result reproduced here.
 - A later comment on that issue describes a separate 12 GB GPU run with 32 GB system RAM reaching roughly 40 GB private commit and stalling in shader pipeline work. Treat memory/commit pressure as a major risk for a 16 GB host, not as a proven hard minimum.
 - The issue's run revision is `a6f5f7a` plus locally applied files from PRs; it is not the same evidence as our pinned source snapshot.
-- Its own Windows CI builds the workspace and runs unit/integration tests without a GPU or game data. The upstream CI explicitly skips the retail title end-to-end test; game-data tests are skipped when their sample variables are unset, and unsupported GPU tests report SKIPPED.\n- `THIRD_PARTY.md` lists additional provenance and compatibility constraints. It explicitly warns against bringing GPL-3.0/LGPL-3.0 code into this GPL-2.0-only project.
+- Its own Windows CI builds the workspace and runs unit/integration tests without a GPU or game data. The upstream CI explicitly skips the retail title end-to-end test; game-data tests are skipped when their sample variables are unset, and unsupported GPU tests report SKIPPED.
+- `THIRD_PARTY.md` lists additional provenance and compatibility constraints. It explicitly warns against bringing GPL-3.0/LGPL-3.0 code into this GPL-2.0-only project.
 
 ## VIctory
 
@@ -46,7 +47,8 @@ The manifest stores these states in `manifests/upstreams.json`. A null Leonida S
 - Requirements include Windows 10/11 x64, AVX2, D3D12 shader model 6.6, and mesh shaders for the world. Several GiB of available Windows commit are needed at startup.
 - The current loader crash handler contains compatibility emulation for selected Zen 2-specific instructions on other CPUs: CLZERO, MONITORX/MWAITX, selected CLWB patterns and SSE4A operations. This reduces some instruction-set blockers but does not prove every CPU path or performance is compatible. AVX2 remains a stated requirement.
 - The run path writes crash diagnostics to `crashes.log`; the loader maps the PE through Windows to preserve TLS/unwind behavior and resolves imports through HLE, host and title DLLs.
-- The README documents `cargo test --workspace` as a no-game-data test suite. The repository pins Rust 1.98.1 in `rust-toolchain.toml`.\n- No stable, versioned JSON run-report format was found in the inspected source. Our adapter therefore imports the text crash log and optional console output conservatively; it does not infer visual progress.
+- The README documents `cargo test --workspace` as a no-game-data test suite. The repository pins Rust 1.98.1 in `rust-toolchain.toml`.
+- No stable, versioned JSON run-report format was found in the inspected source. Our adapter therefore imports the text crash log and optional console output conservatively; it does not infer visual progress.
 
 ## Leonida
 
