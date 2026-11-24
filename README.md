@@ -51,7 +51,7 @@ See [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) for milestone exit crit
 
 - [docs/UPSTREAMS.md](docs/UPSTREAMS.md) — project comparison, licenses, revisions and audit gaps.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — proposed independent integration architecture.
-- [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) — milestones, blockers and evidence gates.
+- [docs/INTEGRATION_PLAN.md](docs/INTEGRATION_PLAN.md) — milestones, blockers and evidence gates.\n- [docs/HOST_PROBE.md](docs/HOST_PROBE.md) — how to collect a read-only Windows hardware inventory.
 - [CONTRIBUTING.md](CONTRIBUTING.md) — security, provenance and contribution rules.
 - [manifests/upstreams.json](manifests/upstreams.json) — machine-readable upstream records.
 - [schemas/run-report.schema.json](schemas/run-report.schema.json) — normalized test-report schema.
