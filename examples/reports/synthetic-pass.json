@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "run_id": "synthetic-schema-check-001",
+  "timestamp_utc": "2026-11-24T12:00:00Z",
+  "upstream": {
+    "id": "local_tool",
+    "repository": "local",
+    "commit": null,
+    "working_tree_clean": null,
+    "build_configuration": "schema-fixture"
+  },
+  "host": {
+    "os": "Windows",
+    "os_build": null,
+    "architecture": "x64",
+    "cpu": "Synthetic test host",
+    "cpu_features": [],
+    "ram_total_mb": null,
+    "commit_limit_mb": null,
+    "gpu": null,
+    "gpu_driver": null,
+    "gpu_vram_mb": null,
+    "graphics_api": "none",
+    "feature_checks": {}
+  },
+  "test": {
+    "name": "report-schema-fixture",
+    "input_class": "synthetic_fixture",
+    "command": "python tools/report/validate_report.py examples/reports/synthetic-pass.json",
+    "tool_versions": {
+      "python": "3.x"
+    },
+    "duration_ms": 0
+  },
+  "result": {
+    "status": "passed",
+    "exit_code": 0,
+    "stage_reached": "not_started",
+    "summary": "Synthetic fixture used only to validate the report schema.",
+    "warnings": [],
+    "errors": [],
+    "crash_code": null,
+    "log_reference": null
+  },
+  "privacy_reviewed": true
+}
